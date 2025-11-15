@@ -1,397 +1,525 @@
-// components/HomePage.tsx
-import React from 'react';
-import Link from 'next/link';
-import { ArrowRight, Github, Linkedin, Mail, Code, Zap, Shield, Layers, ArrowUpRight, CheckCircle2, Globe, Calendar, Clock } from 'lucide-react';
-import { blogPosts } from '@/lib/posts';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ArrowRight, Github, Linkedin, Mail, Code2, Zap, Shield, Layers, ArrowUpRight, Globe, Calendar, Clock, Sparkles, CheckCircle2 } from 'lucide-react';
+
+// Custom hooks
+function useInView(): [boolean, React.RefCallback<HTMLDivElement>] {
+  const [isInView, setIsInView] = useState(false);
+  const [node, setNode] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [node]);
+
+  return [isInView, setNode as React.RefCallback<HTMLDivElement>];
+}
+
+interface FadeInProps {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}
+
+function FadeIn({ children, delay = 0, className = '' }: FadeInProps) {
+  const [inView, ref] = useInView();
+  
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? 'translateY(0)' : 'translateY(40px)',
+        transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+      }}
+      className={className}
+    >
+      {children}
+    </div>
+  );
+}
+
+const blogPosts = [
+  {
+    id: 'multi-tenant-architecture',
+    title: 'Building Multi-Tenant SaaS in Botswana',
+    excerpt: 'How we architected complete data isolation for 500+ concurrent organizations using Supabase Row Level Security.',
+    category: 'Architecture',
+    date: 'Nov 10, 2024',
+    readTime: '8 min'
+  },
+  {
+    id: 'local-payments',
+    title: 'Integrating Orange Money at Scale',
+    excerpt: 'Lessons from building payment infrastructure that works with Botswana\'s mobile money ecosystem.',
+    category: 'Integration',
+    date: 'Nov 5, 2024',
+    readTime: '6 min'
+  },
+  {
+    id: 'offline-first',
+    title: 'PWAs for Emerging Markets',
+    excerpt: 'Why offline-first architecture matters when building for intermittent connectivity.',
+    category: 'Mobile',
+    date: 'Oct 28, 2024',
+    readTime: '7 min'
+  }
+];
 
 export default function HomePage() {
+  const [scrollY, setScrollY] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100
+    });
+  };
+
   return (
-    <>
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-[0.07]"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/5 blur-[120px] rounded-full"></div>
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Enterprise Software<br />for Emerging Markets
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Subtle grid overlay */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:72px_72px] pointer-events-none" />
+
+      {/* Hero */}
+      <section 
+        className="relative min-h-screen flex items-center px-6 md:px-12"
+        onMouseMove={handleMouseMove}
+      >
+        {/* Animated gradient blob */}
+        <div 
+          className="absolute top-1/4 left-1/2 w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[150px] pointer-events-none"
+          style={{
+            transform: `translate(calc(-50% + ${(mousePos.x - 50) * 0.3}px), calc(-50% + ${(mousePos.y - 50) * 0.3}px))`,
+            transition: 'transform 0.3s ease-out'
+          }}
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto w-full py-32">
+          <FadeIn delay={0}>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-sm text-gray-400">Launching Q1 2026</span>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={100}>
+            <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-8 leading-[0.95]">
+              Enterprise Software
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">
+                for Emerging Markets
+              </span>
             </h1>
-            <p className="text-xl text-slate-400 mb-8 max-w-2xl leading-relaxed">
-              Production-grade platforms serving thousands of users across critical infrastructure. Built for scale, security, and challenging market conditions.
+          </FadeIn>
+
+          <FadeIn delay={200}>
+            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl leading-relaxed">
+              Production-ready platforms built for Botswana's real estate and insurance markets. 
+              Multi-tenant architecture designed for scale, security, and challenging connectivity.
             </p>
+          </FadeIn>
+
+          <FadeIn delay={300}>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#contact" className="bg-white text-slate-950 px-8 py-3 rounded-lg font-semibold hover:bg-cyan-50 hover:shadow-xl hover:shadow-white/10 transition-all flex items-center justify-center gap-2 group">
-                Start Your Project <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <a 
+                href="#contact" 
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black rounded-lg font-medium hover:bg-gray-100 transition-all"
+              >
+                <span>Request Early Access</span>
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
-              <a href="#ecosystem" className="border border-slate-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-slate-900 hover:border-slate-600 transition-all">
-                View Live Systems
+              <a 
+                href="#projects" 
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/10 rounded-lg font-medium hover:bg-white/5 transition-all"
+              >
+                View Projects
               </a>
             </div>
-          </div>
+          </FadeIn>
+        </div>
+
+        {/* Scroll indicator */}
+        <div 
+          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          style={{ opacity: Math.max(0, 1 - scrollY / 300) }}
+        >
+          <div className="w-[1px] h-16 bg-gradient-to-b from-white/20 to-transparent" />
         </div>
       </section>
 
-      {/* Proof Points */}
-      <section className="py-12 px-4 border-y border-slate-800">
+      {/* Stats */}
+      <section className="relative px-6 md:px-12 py-24 border-y border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
             {[
-              { value: '10,000+', label: 'Active Users' },
-              { value: '99.9%', label: 'Platform Uptime' },
-              { value: '$200M+', label: 'Market Coverage' },
-              { value: '<2s', label: 'Load Time' }
-            ].map((stat, idx) => (
-              <div key={idx} className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 hover:border-cyan-500/30 transition-all">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-                  {stat.value}
+              { value: '10K+', label: 'Concurrent users', sub: 'Built for scale' },
+              { value: '<200ms', label: 'Search speed', sub: 'Optimized queries' },
+              { value: '$200M', label: 'Market size', sub: 'Botswana insurance' },
+              { value: '7 mo', label: 'Development', sub: 'Solo founder' }
+            ].map((stat, i) => (
+              <FadeIn key={i} delay={i * 100}>
+                <div className="group">
+                  <div className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-500">
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-500 text-sm mb-1">{stat.label}</div>
+                  <div className="text-gray-700 text-xs">{stat.sub}</div>
                 </div>
-                <div className="text-slate-400 text-sm">{stat.label}</div>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Ecosystem Section */}
-      <section id="ecosystem" className="py-20 px-4">
+      {/* Projects */}
+      <section id="projects" className="relative px-6 md:px-12 py-32">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">BITROOT Technology Ecosystem</h2>
-            <p className="text-slate-400 text-lg">Production platforms serving real estate and insurance markets</p>
-          </div>
-          <div className="space-y-8">
+          <FadeIn>
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6">Projects</h2>
+              <p className="text-xl text-gray-500 max-w-2xl">
+                Two production platforms serving real-world markets
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="space-y-6">
             {[
-              { 
-                title: 'Keyat', 
-                category: 'Real Estate Infrastructure', 
-                description: 'Enterprise real estate platform with multi-tenant architecture serving 10,000+ users across Botswana. Features mobile money integration, progressive web app technology, and real-time property management.',
-                tech: ['Next.js', 'React Native', 'Supabase', 'PWA'],
-                metrics: { scale: '10K+ Users', transactions: '500+/month', performance: '<2s Load' }
+              {
+                name: 'Keyat',
+                desc: 'Multi-tenant real estate platform with Orange Money integration, PWA technology, and real-time property management.',
+                tag: 'Real Estate Platform',
+                stack: ['Next.js 15', 'React Native', 'Supabase', 'PWA'],
+                metrics: [
+                  { label: 'Scale', value: '10K+ listings' },
+                  { label: 'Performance', value: '<200ms search' },
+                  { label: 'Integration', value: 'Orange Money' }
+                ]
               },
-              { 
-                title: 'PolicyBridge', 
-                category: 'Insurance Management SaaS', 
-                description: 'Enterprise insurance platform automating document processing for the $200M insurance market. Queue-based PDF generation handling 10,000+ monthly documents with compliance-first architecture and audit trails.',
-                tech: ['Next.js', 'Puppeteer', 'TypeScript', 'PostgreSQL'],
-                metrics: { scale: '500+ Brokers', processing: '10K+ Docs/mo', efficiency: '60% Faster' }
+              {
+                name: 'PolicyBridge',
+                desc: 'Enterprise insurance platform with automated document processing for Botswana\'s $200M insurance market.',
+                tag: 'Insurance SaaS',
+                stack: ['Next.js 15', 'Puppeteer', 'TypeScript', 'PostgreSQL'],
+                metrics: [
+                  { label: 'Automation', value: '20+ hrs/week saved' },
+                  { label: 'Processing', value: '10K+ docs/mo' },
+                  { label: 'Security', value: 'Audit trails' }
+                ]
               }
             ].map((project, idx) => (
-              <div key={idx} className="group border border-slate-800 hover:border-cyan-500/40 hover:shadow-2xl hover:shadow-cyan-500/5 rounded-lg p-8 transition-all duration-300 bg-slate-900/30 hover:bg-slate-900/50">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-2xl font-semibold text-white group-hover:text-cyan-400 transition">
-                        {project.title}
-                      </h3>
-                      <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-all text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1" size={20} />
+              <FadeIn key={idx} delay={idx * 100}>
+                <div className="group relative border border-white/5 rounded-2xl p-8 md:p-12 hover:border-white/10 transition-all duration-500 bg-gradient-to-br from-white/[0.02] to-transparent">
+                  {/* Hover glow */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  
+                  <div className="relative">
+                    <div className="flex items-start justify-between mb-6">
+                      <div>
+                        <div className="text-sm text-gray-500 mb-2">{project.tag}</div>
+                        <h3 className="text-3xl md:text-4xl font-bold mb-4 group-hover:text-cyan-400 transition-colors duration-300">
+                          {project.name}
+                        </h3>
+                      </div>
+                      <ArrowUpRight className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" size={24} />
                     </div>
-                    <p className="text-slate-500 text-sm mb-4 font-medium">{project.category}</p>
-                    <p className="text-slate-400 leading-relaxed">{project.description}</p>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    {project.tech.map((tech, i) => (
-                      <span key={i} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded text-slate-400 text-xs whitespace-nowrap group-hover:border-slate-700 transition-colors">
-                        {tech}
-                      </span>
-                    ))}
+
+                    <p className="text-lg text-gray-400 mb-8 max-w-3xl leading-relaxed">
+                      {project.desc}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {project.stack.map((tech, i) => (
+                        <span 
+                          key={i}
+                          className="px-3 py-1.5 text-xs border border-white/10 rounded-lg bg-white/5 text-gray-400"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/5">
+                      {project.metrics.map((metric, i) => (
+                        <div key={i}>
+                          <div className="text-sm text-gray-500 mb-1">{metric.label}</div>
+                          <div className="text-lg font-semibold">{metric.value}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800 group-hover:border-slate-700 transition-colors">
-                  {Object.entries(project.metrics).map(([key, value], i) => (
-                    <div key={i}>
-                      <div className="text-lg font-bold text-white mb-1">{value}</div>
-                      <div className="text-slate-500 text-xs uppercase tracking-wide">{key}</div>
+              </FadeIn>
+            ))}
+          </div>
+
+          {/* Context */}
+          <FadeIn delay={200}>
+            <div className="mt-16 p-8 md:p-12 border border-white/5 rounded-2xl bg-gradient-to-br from-white/[0.02] to-transparent">
+              <div className="flex items-start gap-4 max-w-3xl">
+                <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                  <Code2 size={20} className="text-cyan-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">Built by Solo Founder-Engineer</h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Both platforms were designed, developed, and deployed by a single technical founder over 7 months. 
+                    From database architecture to payment integration to deployment—every line of code, every design decision.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Approach */}
+      <section className="relative px-6 md:px-12 py-32 border-y border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <FadeIn>
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6">Built for Reality</h2>
+              <p className="text-xl text-gray-500 max-w-2xl">
+                Architected for challenging environments—intermittent connectivity, diverse payment infrastructure, complex regulations
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-24">
+            {[
+              { 
+                icon: Globe, 
+                title: 'Offline-First', 
+                desc: 'PWAs and mobile solutions designed for intermittent connectivity. Data syncs automatically when connection restores.'
+              },
+              { 
+                icon: Shield, 
+                title: 'Multi-Tenant Security', 
+                desc: 'Complete data isolation with row-level security. Scale from hundreds to thousands of organizations safely.'
+              },
+              { 
+                icon: Zap, 
+                title: 'Local Payments', 
+                desc: 'Orange Money, banking, and mobile money integrations. Built-in fallback mechanisms and reconciliation.'
+              }
+            ].map((item, i) => (
+              <FadeIn key={i} delay={i * 100}>
+                <div className="group p-8 border border-white/5 rounded-xl hover:border-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <item.icon className="text-cyan-400" size={24} />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-16">
+            <FadeIn>
+              <div>
+                <h3 className="text-2xl font-semibold mb-8">Technical Foundation</h3>
+                <div className="space-y-6">
+                  {[
+                    { title: 'Type-Safe Development', desc: 'End-to-end TypeScript with strict mode' },
+                    { title: 'Real-Time by Default', desc: 'PostgreSQL subscriptions and WebSocket connections' },
+                    { title: 'Queue-Based Processing', desc: 'Background jobs for documents and data-intensive operations' }
+                  ].map((item, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="w-1 bg-gradient-to-b from-cyan-500 to-transparent flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold mb-1">{item.title}</h4>
+                        <p className="text-sm text-gray-500">{item.desc}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
+            </FadeIn>
+
+            <FadeIn delay={100}>
+              <div className="p-8 border border-white/5 rounded-xl">
+                <h3 className="text-xl font-semibold mb-6">Core Technologies</h3>
+                <div className="space-y-6">
+                  {[
+                    { title: 'Application', items: ['Next.js 15', 'React Native', 'TypeScript', 'Tailwind'] },
+                    { title: 'Data & Backend', items: ['PostgreSQL', 'Supabase', 'Serverless', 'Real-time'] },
+                    { title: 'Infrastructure', items: ['Vercel', 'CDN', 'Queues', 'Monitoring'] }
+                  ].map((section, i) => (
+                    <div key={i}>
+                      <div className="text-xs text-gray-500 mb-3 uppercase tracking-wider">{section.title}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {section.items.map((tech, j) => (
+                          <span key={j} className="px-3 py-1 text-xs border border-white/10 rounded bg-white/5 text-gray-400">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Differentiator Section */}
-      <section id="approach" className="py-20 px-4 border-t border-slate-800 bg-slate-900/30">
+      {/* Capabilities */}
+      <section className="relative px-6 md:px-12 py-32">
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Built for Real-World Conditions</h2>
-            <p className="text-slate-400 text-lg">
-              We architect systems that work in challenging environments—intermittent connectivity, diverse payment infrastructure, and complex regulatory landscapes.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-8 hover:border-cyan-500/30 transition-all">
-              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Globe className="text-cyan-400" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Offline-First Architecture</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Progressive web apps and mobile solutions that function seamlessly with intermittent connectivity. Data syncs automatically when connection is restored.
+          <FadeIn>
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6">What Gets Built</h2>
+              <p className="text-xl text-gray-500 max-w-2xl">
+                End-to-end platform development for complex business requirements
               </p>
             </div>
+          </FadeIn>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-8 hover:border-cyan-500/30 transition-all">
-              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="text-cyan-400" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Multi-Tenant by Default</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Complete data isolation with row-level security. Scale from hundreds to thousands of organizations on shared infrastructure without compromising security.
-              </p>
-            </div>
-
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-8 hover:border-cyan-500/30 transition-all">
-              <div className="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="text-cyan-400" size={24} />
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Payment Agnostic</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Integrate with any payment provider—mobile money, traditional banking, or emerging fintech. Built-in fallback mechanisms and reconciliation systems.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-16">
-            <div>
-              <h3 className="text-2xl font-semibold text-white mb-6">Technical Foundation</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-16 bg-cyan-500 flex-shrink-0"></div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-2">Type-Safe Development</h4>
-                    <p className="text-slate-500 text-sm">End-to-end TypeScript with strict mode. Catch errors at compile time, not in production.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-16 bg-cyan-500 flex-shrink-0"></div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-2">Real-Time by Default</h4>
-                    <p className="text-slate-500 text-sm">PostgreSQL subscriptions and WebSocket connections for live updates across all connected clients.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-1 h-16 bg-cyan-500 flex-shrink-0"></div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-2">Queue-Based Processing</h4>
-                    <p className="text-slate-500 text-sm">Background job processing for document generation, email delivery, and data-intensive operations.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-8">
-              <h3 className="text-xl font-semibold text-white mb-6">Core Technologies</h3>
-              
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-slate-400 text-xs font-medium mb-3 uppercase tracking-wide">Application Layer</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['Next.js 15', 'React Native', 'TypeScript', 'Tailwind CSS'].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded text-slate-300 text-sm">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-slate-400 text-xs font-medium mb-3 uppercase tracking-wide">Data & Backend</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['PostgreSQL', 'Supabase', 'Serverless Functions', 'Real-time'].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded text-slate-300 text-sm">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-slate-400 text-xs font-medium mb-3 uppercase tracking-wide">Infrastructure</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['Vercel', 'CDN', 'Queue Processing', 'Monitoring'].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 bg-slate-950 border border-slate-800 rounded text-slate-300 text-sm">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Capabilities Section */}
-      <section id="capabilities" className="py-20 px-4 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">What We Build</h2>
-            <p className="text-slate-400 text-lg">End-to-end platform development for complex business requirements</p>
-          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { 
-                icon: Code, 
-                title: 'Web Platforms', 
-                desc: 'Full-stack applications with Next.js, TypeScript, and serverless architecture. Optimized for performance and SEO.'
-              },
-              { 
-                icon: Zap, 
-                title: 'Mobile Apps', 
-                desc: 'Cross-platform React Native applications with offline-first design and native performance.'
-              },
-              { 
-                icon: Shield, 
-                title: 'Enterprise Security', 
-                desc: 'Multi-tenant architecture with row-level security, encryption, audit trails, and compliance controls.'
-              },
-              { 
-                icon: Layers, 
-                title: 'Cloud Infrastructure', 
-                desc: 'Scalable deployment with CDN optimization, queue-based processing, and 99.9% uptime guarantees.'
-              }
-            ].map((service, idx) => (
-              <div key={idx} className="group">
-                <div className="mb-4 inline-flex p-3 bg-slate-900 rounded-lg border border-slate-800 group-hover:border-cyan-500/50 transition">
-                  <service.icon className="text-cyan-400" size={24} />
+              { icon: Code2, title: 'Web Platforms', desc: 'Full-stack applications with Next.js, TypeScript, and serverless architecture' },
+              { icon: Zap, title: 'Mobile Apps', desc: 'Cross-platform React Native with offline-first design' },
+              { icon: Shield, title: 'Enterprise Security', desc: 'Multi-tenant architecture with encryption and audit trails' },
+              { icon: Layers, title: 'Cloud Infrastructure', desc: 'Scalable deployment with CDN and production monitoring' }
+            ].map((item, i) => (
+              <FadeIn key={i} delay={i * 50}>
+                <div className="group">
+                  <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <item.icon className="text-cyan-400" size={20} />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">{service.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{service.desc}</p>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Blog Section */}
-      <section id="blog" className="py-20 px-4 border-t border-slate-800">
+      {/* Blog */}
+      <section className="relative px-6 md:px-12 py-32 border-y border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Technical Insights</h2>
-            <p className="text-slate-400 text-lg">Building enterprise software for emerging markets—lessons from the field</p>
-          </div>
+          <FadeIn>
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6">Insights</h2>
+              <p className="text-xl text-gray-500 max-w-2xl">
+                Building enterprise software for emerging markets
+              </p>
+            </div>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <Link
-                key={post.id}
-                href={`/blog/${post.id}`}
-                className="group border border-slate-800 hover:border-cyan-500/40 rounded-lg overflow-hidden transition-all duration-300 bg-slate-900/30 hover:bg-slate-900/50 cursor-pointer"
-              >
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-medium text-cyan-400 uppercase tracking-wide">{post.category}</span>
-                    <span className="text-slate-700">•</span>
-                    <div className="flex items-center gap-1 text-slate-500 text-xs">
-                      <Clock size={12} />
-                      <span>{post.readTime}</span>
-                    </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {blogPosts.map((post, i) => (
+              <FadeIn key={i} delay={i * 100}>
+                <a href={`#blog/${post.id}`} className="group block p-6 border border-white/5 rounded-xl hover:border-white/10 transition-all duration-300">
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
+                    <span className="text-cyan-400">{post.category}</span>
+                    <span>•</span>
+                    <span>{post.readTime}</span>
                   </div>
-                  
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-cyan-400 transition leading-tight">
+                  <h3 className="text-lg font-semibold mb-3 group-hover:text-cyan-400 transition-colors">
                     {post.title}
                   </h3>
-                  
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
                     {post.excerpt}
                   </p>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-                    <div className="flex items-center gap-1 text-slate-500 text-xs">
-                      <Calendar size={12} />
-                      <span>{post.date}</span>
-                    </div>
-                    <ArrowRight className="text-cyan-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" size={16} />
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                    <span className="text-xs text-gray-600">{post.date}</span>
+                    <ArrowRight className="text-cyan-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" size={14} />
                   </div>
-                </div>
-              </Link>
+                </a>
+              </FadeIn>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <a href="#contact" className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition">
-              <span>Want to discuss these topics?</span>
-              <ArrowRight size={16} />
-            </a>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 border-t border-slate-800">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Start a Project</h2>
-            <p className="text-slate-400 text-lg mb-8">
-              We work with companies building critical infrastructure in emerging markets. Let's discuss your technical requirements.
+      {/* Contact */}
+      <section id="contact" className="relative px-6 md:px-12 py-32">
+        <div className="max-w-4xl mx-auto text-center">
+          <FadeIn>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">Get Early Access</h2>
+            <p className="text-xl text-gray-400 mb-12">
+              Production-ready platforms launching Q1 2026. Join early adopters testing the beta.
             </p>
-          </div>
-          
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-8 max-w-2xl mx-auto">
-            <h3 className="text-xl font-semibold text-white mb-6 text-center">Our Process</h3>
-            
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="text-cyan-400 flex-shrink-0 mt-1" size={20} />
-                <div>
-                  <div className="text-white font-medium">Technical Discovery</div>
-                  <div className="text-slate-500 text-sm">Review requirements, data models, and integration points</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="text-cyan-400 flex-shrink-0 mt-1" size={20} />
-                <div>
-                  <div className="text-white font-medium">Architecture Design</div>
-                  <div className="text-slate-500 text-sm">System design, database schema, and API specifications</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="text-cyan-400 flex-shrink-0 mt-1" size={20} />
-                <div>
-                  <div className="text-white font-medium">Proposal & Timeline</div>
-                  <div className="text-slate-500 text-sm">Detailed scope, milestone delivery plan, and pricing</div>
-                </div>
-              </div>
-            </div>
+          </FadeIn>
 
-            <a 
-              href="mailto:hello@bitroot.tech" 
-              className="w-full bg-white text-slate-950 px-8 py-3 rounded-lg font-semibold hover:bg-cyan-50 hover:shadow-xl hover:shadow-white/10 transition-all flex items-center justify-center gap-2 group"
-            >
-              <Mail size={20} /> hello@bitroot.tech
-            </a>
-          </div>
-          
-          {/* Social Links */}
-          <div className="flex gap-6 justify-center mt-12 pt-8 border-t border-slate-800">
-            <a href="https://github.com/bitroot" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-cyan-400 transition">
-              <Github size={20} />
-            </a>
-            <a href="https://linkedin.com/company/bitroot" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-cyan-400 transition">
-              <Linkedin size={20} />
-            </a>
-            <a href="mailto:hello@bitroot.tech" className="text-slate-500 hover:text-cyan-400 transition">
-              <Mail size={20} />
-            </a>
-          </div>
+          <FadeIn delay={100}>
+            <div className="p-8 md:p-12 border border-white/5 rounded-2xl mb-12 bg-gradient-to-br from-white/[0.02] to-transparent">
+              <h3 className="text-xl font-semibold mb-8">What You Get</h3>
+              <div className="grid md:grid-cols-3 gap-6 text-left mb-8">
+                {[
+                  { title: 'Beta Access', desc: 'First access before public launch' },
+                  { title: 'Technical Walkthrough', desc: 'Direct demo with the founder' },
+                  { title: 'Custom Options', desc: 'White-label or custom features' }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-3">
+                    <CheckCircle2 className="text-cyan-400 flex-shrink-0 mt-0.5" size={18} />
+                    <div>
+                      <div className="font-medium mb-1">{item.title}</div>
+                      <div className="text-sm text-gray-500">{item.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <a 
+                href="mailto:hello@bitroot.tech"
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-lg font-medium hover:bg-gray-100 transition-all"
+              >
+                <Mail size={18} />
+                <span>hello@bitroot.tech</span>
+              </a>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={200}>
+            <div className="flex items-center justify-center gap-6 pt-8 border-t border-white/5">
+              <a href="https://github.com" className="text-gray-500 hover:text-white transition-colors">
+                <Github size={20} />
+              </a>
+              <a href="https://linkedin.com" className="text-gray-500 hover:text-white transition-colors">
+                <Linkedin size={20} />
+              </a>
+              <a href="mailto:hello@bitroot.tech" className="text-gray-500 hover:text-white transition-colors">
+                <Mail size={20} />
+              </a>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-12 px-4 bg-slate-900/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6">
-            <p className="text-slate-400 mb-2 text-lg">Building infrastructure for emerging markets</p>
-            <p className="text-slate-600 text-sm">Gaborone, Botswana</p>
-          </div>
-          <div className="text-center">
-            <p className="text-slate-500 text-sm">&copy; 2025 BITROOT. All rights reserved.</p>
-          </div>
+      <footer className="relative px-6 md:px-12 py-16 border-t border-white/5">
+        <div className="max-w-7xl mx-auto text-center">
+          <FadeIn>
+            <p className="text-gray-500 mb-2">Building infrastructure for emerging markets</p>
+            <p className="text-gray-700 text-sm mb-6">Gaborone, Botswana</p>
+            <p className="text-gray-700 text-sm">&copy; 2025 BITROOT. All rights reserved.</p>
+          </FadeIn>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
