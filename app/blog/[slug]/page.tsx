@@ -1,5 +1,6 @@
 // ============================================
-// FILE 2: app/blog/[slug]/page.tsx
+// FILE: app/blog/[slug]/page.tsx
+// Complete file - no duplicates
 // ============================================
 
 import { Metadata } from 'next';
