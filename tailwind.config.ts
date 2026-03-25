@@ -11,18 +11,21 @@ const config: Config = {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', '-apple-system', 'sans-serif'],
       },
+      // Keep your custom brand scale but rely on Tailwind's built-in
+      // emerald-* for UI. emerald-700 (#047857) is the Supabase-adjacent
+      // muted-but-confident green that works on white backgrounds.
       colors: {
         brand: {
-          50: '#e8faf0',
-          100: '#d1f4e2',
-          200: '#a3e9c4',
-          300: '#75dea7',
-          400: '#47d389',
-          500: '#2ecc71',   // primary green
-          600: '#25a55a',
-          700: '#1c7e44',
-          800: '#13562d',
-          900: '#0a2f19',
+          50:  '#ecfdf5',
+          100: '#d1fae5',
+          200: '#a7f3d0',
+          300: '#6ee7b7',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          700: '#047857',  // primary — use this as main accent
+          800: '#065f46',
+          900: '#064e3b',
         },
       },
     },
