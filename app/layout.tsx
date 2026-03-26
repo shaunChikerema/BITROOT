@@ -28,19 +28,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <title>BITROOT — Web & Mobile App Development for Africa</title>
-        <meta name="description" content="BITROOT builds world-class web and mobile applications for African businesses. Expert team delivering real estate, fintech, and enterprise software solutions." />
+        <title>BITROOT — Africa's Software Studio | Web & Mobile App Development</title>
+        <meta name="description" content="BITROOT builds world-class web and mobile applications for African businesses. Real estate, fintech, and enterprise software from Gaborone, Botswana." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans antialiased bg-white text-slate-900">
 
-        {/* Announcement bar — subtle, not loud */}
-        <div className="bg-slate-50 border-b border-slate-200 text-slate-600 text-center py-2 text-xs font-medium tracking-wide">
-          Now accepting new projects for Q2 2026 —{' '}
-          <a href="mailto:hello@bitroot.tech" className="text-emerald-700 font-semibold hover:underline">
-            Book a free discovery call →
+        {/* Announcement bar */}
+        <div className="bg-slate-900 text-white text-center py-2 text-xs font-medium">
+          We have capacity for 2 new projects in Q2 2026 —{' '}
+          <a href="mailto:hello@bitroot.tech" className="text-emerald-400 font-semibold hover:text-emerald-300 underline underline-offset-2">
+            Book a free 30-min call →
           </a>
         </div>
 
@@ -54,19 +54,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2.5 z-50" onClick={() => setIsMobileMenuOpen(false)}>
-                {/* Supabase-style: small monogram mark, dark text */}
                 <div className="w-7 h-7 bg-emerald-600 rounded-md flex items-center justify-center">
                   <span className="text-white font-bold text-xs tracking-tight">BR</span>
                 </div>
                 <span className="text-lg font-bold text-slate-900 tracking-tight">BITROOT</span>
               </Link>
 
-              {/* Desktop Nav */}
+              {/* Desktop Nav — removed redundant "Home" link */}
               <div className="hidden md:flex items-center gap-0.5">
-                <Link href="/" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
-                  Home
-                </Link>
-
                 <div className="relative" onMouseEnter={() => setIsProductsOpen(true)} onMouseLeave={() => setIsProductsOpen(false)}>
                   <button className="flex items-center gap-1 px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
                     Products
@@ -89,20 +84,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   )}
                 </div>
 
-                <Link href="/blog" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
-                  Blog
+                <Link href="/#services" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
+                  Services
                 </Link>
 
                 <Link href="/#team" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
                   Team
                 </Link>
 
-                {/* CTA button — outlined style, not filled green block */}
+                <Link href="/blog" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
+                  Blog
+                </Link>
+
+                {/* CTA — solid, not outlined, because the bar above is too subtle alone */}
                 <a
                   href="mailto:hello@bitroot.tech"
-                  className="ml-4 border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-4 py-1.5 rounded-lg font-medium transition-all text-sm"
+                  className="ml-4 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-lg font-semibold transition-all text-sm"
                 >
-                  Get in Touch
+                  Free discovery call
                 </a>
               </div>
 
@@ -118,7 +117,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="md:hidden fixed inset-0 bg-white z-40 pt-20 px-6">
               <div className="flex flex-col gap-1">
                 {[
-                  { href: '/', label: 'Home' },
+                  { href: '/#services', label: 'Services' },
                   { href: '/#team', label: 'Team' },
                   { href: '/blog', label: 'Blog' },
                   ...productLinks.map(p => ({ href: p.href, label: p.label }))
@@ -128,8 +127,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {link.label}
                   </Link>
                 ))}
-                <a href="mailto:hello@bitroot.tech" className="mt-4 border border-emerald-600 text-emerald-700 px-6 py-3 rounded-xl font-semibold text-center">
-                  Get in Touch
+                <a href="mailto:hello@bitroot.tech" className="mt-4 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold text-center">
+                  Book a free call
+                </a>
+                <a href="https://wa.me/26771234567" className="mt-2 border border-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold text-center text-sm">
+                  WhatsApp us
                 </a>
               </div>
             </div>
@@ -149,36 +151,52 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </div>
                   <span className="text-lg font-bold tracking-tight">BITROOT</span>
                 </div>
-                <p className="text-slate-400 leading-relaxed mb-6 max-w-xs text-sm">
-                  Building world-class web and mobile applications for African businesses. Headquartered in Gaborone, Botswana.
+                <p className="text-slate-400 leading-relaxed mb-4 max-w-xs text-sm">
+                  Africa's software studio. We build enterprise-grade web and mobile applications for businesses across the continent.
                 </p>
-                <a href="mailto:hello@bitroot.tech" className="inline-block text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
-                  hello@bitroot.tech →
-                </a>
+                {/* Physical address — signals legitimacy */}
+                <p className="text-slate-500 text-xs mb-5 leading-relaxed">
+                  Plot 54358, Gaborone Central<br />
+                  Gaborone, Botswana
+                </p>
+                <div className="flex flex-col gap-2">
+                  <a href="mailto:hello@bitroot.tech" className="inline-block text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
+                    hello@bitroot.tech
+                  </a>
+                  <a href="https://wa.me/26771234567" className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    WhatsApp
+                  </a>
+                </div>
               </div>
 
               <div>
                 <h4 className="font-semibold text-xs uppercase tracking-widest text-slate-500 mb-4">Products</h4>
                 <ul className="space-y-3">
-                  {['Keyat Platform', 'PolicyBridge', 'Case Studies'].map(item => (
-                    <li key={item}><a href="#" className="text-slate-400 hover:text-white transition-colors text-sm">{item}</a></li>
-                  ))}
+                  <li><Link href="/projects/keyat" className="text-slate-400 hover:text-white transition-colors text-sm">Keyat Platform</Link></li>
+                  <li><Link href="/projects/policybridge" className="text-slate-400 hover:text-white transition-colors text-sm">PolicyBridge</Link></li>
+                  <li><a href="https://keyat.vercel.app" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors text-sm">keyat.vercel.app ↗</a></li>
+                  <li><a href="https://policybridge.vercel.app" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors text-sm">policybridge.vercel.app ↗</a></li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold text-xs uppercase tracking-widest text-slate-500 mb-4">Company</h4>
                 <ul className="space-y-3">
-                  {['About Us', 'Our Team', 'Blog', 'Careers'].map(item => (
-                    <li key={item}><a href="#" className="text-slate-400 hover:text-white transition-colors text-sm">{item}</a></li>
-                  ))}
+                  <li><Link href="/#team" className="text-slate-400 hover:text-white transition-colors text-sm">Our Team</Link></li>
+                  <li><Link href="/blog" className="text-slate-400 hover:text-white transition-colors text-sm">Blog</Link></li>
+                  <li><a href="mailto:careers@bitroot.tech" className="text-slate-400 hover:text-white transition-colors text-sm">Careers</a></li>
+                  {/* LinkedIn placeholder — add real URL */}
+                  <li><a href="https://linkedin.com/company/bitroot" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors text-sm">LinkedIn ↗</a></li>
                 </ul>
               </div>
             </div>
 
             <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-slate-600 text-xs">© 2026 BITROOT Technologies. All rights reserved. · Gaborone, Botswana</p>
-              <p className="text-slate-700 text-xs">Built with ❤️ for Africa</p>
+              <p className="text-slate-600 text-xs">© 2026 BITROOT Technologies (Pty) Ltd. · Gaborone, Botswana · Registered in Botswana</p>
+              <p className="text-slate-700 text-xs">Built for Africa 🌍</p>
             </div>
           </div>
         </footer>

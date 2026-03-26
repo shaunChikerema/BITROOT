@@ -2,74 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { 
-  ArrowRight, Code2, Database, Globe, 
-  Smartphone, Shield, Users, Building2, 
-  CreditCard, FileText, MapPin, Search, Award,
-  Rocket, BarChart3, ChevronRight
+import {
+  ArrowRight, Code2, Database,
+  Smartphone, Shield, Building2,
+  ChevronRight, MapPin, ExternalLink,
+  Image as ImageIcon, Play, X, ChevronLeft, ChevronRight as ChevronRightIcon
 } from 'lucide-react';
 
-function TypedSuffix({ 
-  prefix, 
-  suffixes, 
-  typingSpeed = 80, 
-  deletingSpeed = 40, 
-  pauseTime = 2000 
-}: { 
-  prefix: string; 
-  suffixes: string[]; 
-  typingSpeed?: number; 
-  deletingSpeed?: number; 
-  pauseTime?: number;
-}) {
-  const [currentSuffixIndex, setCurrentSuffixIndex] = useState(0);
-  const [currentDisplaySuffix, setCurrentDisplaySuffix] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentFullSuffix = suffixes[currentSuffixIndex];
-    let timer: NodeJS.Timeout;
-
-    if (!isDeleting && currentDisplaySuffix === currentFullSuffix) {
-      timer = setTimeout(() => setIsDeleting(true), pauseTime);
-    } else if (isDeleting && currentDisplaySuffix === '') {
-      setIsDeleting(false);
-      setCurrentSuffixIndex((prev) => (prev + 1) % suffixes.length);
-    } else {
-      const speed = isDeleting ? deletingSpeed : typingSpeed;
-      timer = setTimeout(() => {
-        setCurrentDisplaySuffix((prev) => {
-          if (!isDeleting) return currentFullSuffix.slice(0, prev.length + 1);
-          else return currentFullSuffix.slice(0, prev.length - 1);
-        });
-      }, speed);
-    }
-
-    return () => clearTimeout(timer);
-  }, [currentDisplaySuffix, isDeleting, currentSuffixIndex, suffixes, typingSpeed, deletingSpeed, pauseTime]);
-
-  return (
-    <span>
-      {prefix}{' '}
-      {/* Muted emerald — not screaming green */}
-      <span className="text-emerald-700 border-r-2 border-emerald-600 pr-1">
-        {currentDisplaySuffix}
-      </span>
-    </span>
-  );
-}
-
-const trustedCompanies = [
-  { name: 'Paragon Insurance Brokers' },
-  { name: 'Alfa-First Insurance' },
-  { name: 'Winning Pillar' },
-  { name: 'Keyat Real Estate' },
-  { name: 'Botswana Savings Bank' },
-  { name: 'Gaborone Tech Hub' },
-  { name: 'Innovate Botswana' },
-];
-
-const builtSuffixes = ['to Scale', 'for the Web', 'for Android & iOS', 'for the Market'];
+// ── Hooks ──────────────────────────────────────────────────────────────────
 
 function useInView() {
   const [isInView, setIsInView] = useState(false);
@@ -78,7 +18,7 @@ function useInView() {
     if (!ref.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsInView(true); },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
@@ -93,8 +33,8 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
       ref={ref}
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(32px)',
-        transition: `all 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+        transform: inView ? 'translateY(0)' : 'translateY(28px)',
+        transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
       }}
       className={className}
     >
@@ -103,92 +43,321 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
   );
 }
 
-const teamMembers = [
-  { name: 'Thabo Molefe', role: 'CTO & Co-founder', expertise: 'System Architecture, Cloud', image: 'T', color: 'bg-emerald-50 text-emerald-700' },
-  { name: 'Kabelo Dlamini', role: 'Lead Frontend Engineer', expertise: 'React, Next.js, PWA', image: 'K', color: 'bg-blue-50 text-blue-600' },
-  { name: 'Lebo Ncube', role: 'Backend & Database Lead', expertise: 'PostgreSQL, Supabase', image: 'L', color: 'bg-violet-50 text-violet-600' },
-  { name: 'Tumelo Moeng', role: 'Mobile Developer', expertise: 'React Native, Flutter', image: 'T', color: 'bg-amber-50 text-amber-600' },
-  { name: 'Goitseone Phiri', role: 'Product Manager', expertise: 'Fintech, Real Estate', image: 'G', color: 'bg-rose-50 text-rose-600' },
-  { name: 'Mpho Sebina', role: 'UI/UX Designer', expertise: 'Design Systems, Accessibility', image: 'M', color: 'bg-cyan-50 text-cyan-600' },
+// ── Modal Components ────────────────────────────────────────────────────────
+
+type ScreenshotModalProps = {
+  project: 'keyat' | 'policybridge';
+  onClose: () => void;
+};
+
+const projectScreenshots: Record<'keyat' | 'policybridge', { src: string; caption: string }[]> = {
+  keyat: [
+    { src: '/screenshots/keyat-home.png', caption: 'Homepage — property listings across Gaborone' },
+    { src: '/screenshots/keyat-listing.png', caption: 'Listing detail with Orange Money payment flow' },
+    { src: '/screenshots/keyat-search.png', caption: 'Search & filter with offline-first PWA support' },
+  ],
+  policybridge: [
+    { src: '/screenshots/pb-dashboard.png', caption: 'Broker dashboard — client overview' },
+    { src: '/screenshots/pb-policy.png', caption: 'Policy tracking & renewal management' },
+    { src: '/screenshots/pb-pdf.png', caption: 'Auto-generated compliance PDF output' },
+  ],
+};
+
+const projectVideos: Record<'keyat' | 'policybridge', { url: string; title: string }> = {
+  keyat: { url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Keyat — Product Walkthrough' },
+  policybridge: { url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'PolicyBridge — Product Walkthrough' },
+};
+
+function ScreenshotModal({ project, onClose }: ScreenshotModalProps) {
+  const [idx, setIdx] = useState(0);
+  const shots = projectScreenshots[project];
+  const accentColor = project === 'keyat' ? 'bg-emerald-600' : 'bg-blue-600';
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') setIdx(i => (i + 1) % shots.length);
+      if (e.key === 'ArrowLeft') setIdx(i => (i - 1 + shots.length) % shots.length);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose, shots.length]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <ImageIcon size={15} className="text-slate-400" />
+            <span className="text-sm font-semibold text-slate-700 capitalize">{project}</span>
+            <span className="text-xs text-slate-400">{idx + 1} / {shots.length}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="relative bg-slate-100 aspect-video flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 gap-3">
+            <ImageIcon size={48} strokeWidth={1} />
+            <p className="text-xs font-medium text-slate-400">{shots[idx].src}</p>
+            <p className="text-[11px] text-slate-300 max-w-xs text-center">{shots[idx].caption}</p>
+          </div>
+          {/* Uncomment once real screenshots exist:
+          <img src={shots[idx].src} alt={shots[idx].caption} className="w-full h-full object-cover object-top" />
+          */}
+
+          {shots.length > 1 && (
+            <>
+              <button
+                onClick={() => setIdx(i => (i - 1 + shots.length) % shots.length)}
+                className="absolute left-3 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md text-slate-600 hover:text-slate-900 transition-all"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => setIdx(i => (i + 1) % shots.length)}
+                className="absolute right-3 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md text-slate-600 hover:text-slate-900 transition-all"
+              >
+                <ChevronRightIcon size={16} />
+              </button>
+            </>
+          )}
+        </div>
+
+        <div className="px-6 py-4 flex items-center justify-between">
+          <p className="text-xs text-slate-500">{shots[idx].caption}</p>
+          <div className="flex gap-1.5">
+            {shots.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIdx(i)}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${i === idx ? `${accentColor} scale-125` : 'bg-slate-200 hover:bg-slate-300'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VideoModal({ project, onClose }: { project: 'keyat' | 'policybridge'; onClose: () => void }) {
+  const video = projectVideos[project];
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border border-slate-200"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <Play size={15} className="text-slate-400" />
+            <span className="text-sm font-semibold text-slate-700">{video.title}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="aspect-video bg-slate-900 flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center text-slate-500 gap-3">
+            <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center">
+              <Play size={28} className="text-slate-400 ml-1" />
+            </div>
+            <p className="text-xs text-slate-500">Video demo coming soon</p>
+          </div>
+          {/* Uncomment to embed:
+          <iframe src={video.url} title={video.title} className="w-full h-full" frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          */}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Project Action Buttons ─────────────────────────────────────────────────
+
+type ProjectActionsProps = {
+  project: 'keyat' | 'policybridge';
+  siteUrl: string;
+  onScreenshots: () => void;
+  onVideo: () => void;
+};
+
+function ProjectActions({ project, siteUrl, onScreenshots, onVideo }: ProjectActionsProps) {
+  const isKeyat = project === 'keyat';
+  const primaryStyle = isKeyat
+    ? 'bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-600 hover:border-emerald-500'
+    : 'bg-blue-600 hover:bg-blue-500 text-white border border-blue-600 hover:border-blue-500';
+
+  return (
+    <div className="flex items-center gap-2 mt-5 pt-5 border-t border-slate-100">
+      <a
+        href={siteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={e => e.stopPropagation()}
+        className={`inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-all ${primaryStyle}`}
+      >
+        <ExternalLink size={12} />
+        Visit Site
+      </a>
+      <button
+        onClick={e => { e.preventDefault(); e.stopPropagation(); onScreenshots(); }}
+        className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-lg transition-all"
+      >
+        <ImageIcon size={12} />
+        Screenshots
+      </button>
+      <button
+        onClick={e => { e.preventDefault(); e.stopPropagation(); onVideo(); }}
+        className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-lg transition-all"
+      >
+        <Play size={12} />
+        Demo
+      </button>
+    </div>
+  );
+}
+
+// ── Data ───────────────────────────────────────────────────────────────────
+
+const trustedClients = [
+  { name: 'Paragon Insurance Brokers', industry: 'Insurance' },
+  { name: 'Alfa-First Insurance', industry: 'Insurance' },
+  { name: 'Winning Pillar', industry: 'Consulting' },
+  { name: 'Keyat Real Estate', industry: 'Real Estate' },
+  { name: 'Botswana Savings Bank', industry: 'Finance' },
+  { name: 'Gaborone Tech Hub', industry: 'Tech' },
+  { name: 'Innovate Botswana', industry: 'Innovation' },
 ];
 
+const teamMembers = [
+  { name: 'Thabo Molefe', role: 'CTO & Co-founder', expertise: 'System Architecture · Cloud', initial: 'TM', color: 'bg-emerald-50 text-emerald-700', quote: 'I architect systems that survive production.' },
+  { name: 'Kabelo Dlamini', role: 'Lead Frontend Engineer', expertise: 'React · Next.js · PWA', initial: 'KD', color: 'bg-blue-50 text-blue-600', quote: 'Fast interfaces are respectful interfaces.' },
+  { name: 'Lebo Ncube', role: 'Backend & Database Lead', expertise: 'PostgreSQL · Supabase', initial: 'LN', color: 'bg-violet-50 text-violet-600', quote: 'Data models are the real product design.' },
+  { name: 'Tumelo Moeng', role: 'Mobile Developer', expertise: 'React Native · Flutter', initial: 'TM', color: 'bg-amber-50 text-amber-600', quote: 'Mobile-first means Africa-first.' },
+  { name: 'Goitseone Phiri', role: 'Product Manager', expertise: 'Fintech · Real Estate', initial: 'GP', color: 'bg-rose-50 text-rose-600', quote: 'I translate business problems into roadmaps.' },
+  { name: 'Mpho Sebina', role: 'UI/UX Designer', expertise: 'Design Systems · Accessibility', initial: 'MS', color: 'bg-cyan-50 text-cyan-600', quote: 'Accessible design is just good design.' },
+];
+
+// ── Page ───────────────────────────────────────────────────────────────────
+
 export default function Home() {
+  const [modal, setModal] = useState<{
+    type: 'screenshots' | 'video';
+    project: 'keyat' | 'policybridge';
+  } | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = modal ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [modal]);
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
 
+      {/* ── Modals ──────────────────────────────────────────────── */}
+      {modal?.type === 'screenshots' && (
+        <ScreenshotModal project={modal.project} onClose={() => setModal(null)} />
+      )}
+      {modal?.type === 'video' && (
+        <VideoModal project={modal.project} onClose={() => setModal(null)} />
+      )}
+
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative pt-24 pb-28 bg-white">
-        {/* Very subtle grid pattern — Supabase-style */}
+      <section className="relative pt-20 pb-24 bg-white overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `linear-gradient(to right, #e2e8f020 1px, transparent 1px),
-                              linear-gradient(to bottom, #e2e8f020 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
+            backgroundImage: `radial-gradient(circle, #cbd5e1 1px, transparent 1px)`,
+            backgroundSize: '28px 28px',
+            opacity: 0.35,
           }}
         />
-        {/* Soft green radial glow — not a green block */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center top, rgba(16, 185, 129, 0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse at center top, rgba(16, 185, 129, 0.09) 0%, transparent 65%)',
           }}
         />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative">
           <FadeIn>
-            <div className="text-center max-w-3xl mx-auto">
-              {/* Badge — understated */}
-              <div className="inline-flex items-center gap-2 border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-full px-3.5 py-1 text-xs font-medium mb-8 tracking-wide">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Trusted by African businesses since 2023
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 border border-slate-200 bg-white text-slate-500 rounded-full px-3.5 py-1 text-xs font-medium mb-7 shadow-sm">
+                <MapPin size={11} className="text-emerald-600" />
+                Gaborone, Botswana · Building for Africa
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-slate-900 leading-[1.1]">
-                Web & Mobile Apps
+              <h1 className="text-5xl md:text-[64px] font-extrabold tracking-tight mb-5 text-slate-900 leading-[1.08]">
+                Africa's software studio.
                 <br />
-                <TypedSuffix prefix="Built" suffixes={builtSuffixes} />
+                <span className="text-emerald-700">We build products that ship.</span>
               </h1>
 
-              <p className="text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-                We design and develop enterprise-grade software that solves real problems in emerging markets. 
-                From real estate marketplaces to insurance platforms — we deliver.
+              <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-4">
+                Real estate marketplaces. Insurance platforms. Enterprise tools.
+                We design and develop software that solves real problems in emerging markets.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-3 mt-8">
-                {/* Primary: filled emerald — used ONCE, not everywhere */}
+              <p className="text-sm text-slate-400 mb-10">
+                We have capacity for <span className="text-slate-600 font-semibold">2 new projects</span> in Q2 2026. Let's talk this week.
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-3">
                 <a
                   href="mailto:hello@bitroot.tech"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-semibold transition-all text-sm shadow-sm"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold transition-all text-sm shadow-sm"
                 >
-                  Start a Project <ArrowRight size={15} />
+                  Book a 30-min call <ArrowRight size={15} />
                 </a>
-                {/* Secondary: clean border */}
                 <Link
                   href="#work"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg font-semibold transition-all text-sm"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg font-semibold transition-all text-sm"
                 >
-                  See Our Work <ChevronRight size={15} />
+                  See our work <ChevronRight size={15} />
                 </Link>
               </div>
             </div>
           </FadeIn>
 
-          {/* Marquee — toned down */}
-          <div className="mt-20 overflow-hidden">
-            <p className="text-center text-xs text-slate-400 mb-5 uppercase tracking-widest font-medium">Trusted by</p>
-            <div className="relative">
-              <div className="animate-marquee inline-flex gap-12">
-                {trustedCompanies.concat(trustedCompanies).map((company, idx) => (
-                  <span key={idx} className="text-slate-400 text-sm font-medium px-4 py-2 whitespace-nowrap">
-                    {company.name}
-                  </span>
+          <FadeIn delay={200}>
+            <div className="mt-14 overflow-hidden">
+              <p className="text-center text-xs text-slate-400 mb-5 uppercase tracking-widest font-medium">Trusted by</p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {trustedClients.map((client, i) => (
+                  <div key={i} className="flex items-center gap-2 px-3.5 py-2 border border-slate-100 rounded-lg bg-slate-50 hover:border-slate-200 transition-colors">
+                    <div className="w-5 h-5 rounded bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-[9px] flex-shrink-0">
+                      {client.name[0]}
+                    </div>
+                    <span className="text-slate-600 text-xs font-medium whitespace-nowrap">{client.name}</span>
+                    <span className="text-slate-300 text-[10px] hidden sm:block">{client.industry}</span>
+                  </div>
                 ))}
               </div>
-              <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-              <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent pointer-events-none" />
             </div>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -196,31 +365,58 @@ export default function Home() {
       <section id="services" className="py-24 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeIn>
-            <div className="text-center max-w-xl mx-auto mb-14">
-              {/* Section label — small emerald text, not a green badge */}
-              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-2">What We Do</p>
-              <h2 className="text-3xl font-extrabold mb-3 text-slate-900">End-to-End Software Development</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">From concept to deployment, we build solutions that scale with your business.</p>
+            <div className="max-w-xl mb-14">
+              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-3">What we build</p>
+              <h2 className="text-4xl font-extrabold mb-4 text-slate-900 tracking-tight">End-to-end software development</h2>
+              <p className="text-slate-500 leading-relaxed">From concept to deployment — we own the full stack and deliver on time.</p>
             </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { icon: Code2, title: 'Web Applications', desc: 'React, Next.js, Vue — responsive, performant, and accessible web apps.' },
-              { icon: Smartphone, title: 'Mobile Apps', desc: 'React Native, Flutter — cross-platform apps with native performance.' },
-              { icon: Database, title: 'Backend & APIs', desc: 'Node.js, Python, PostgreSQL — scalable serverless and cloud architectures.' },
-            ].map((s, i) => (
-              <FadeIn key={i} delay={i * 80}>
-                <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-emerald-200 hover:shadow-sm transition-all group">
-                  {/* Icon: small, refined */}
-                  <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center mb-5 group-hover:bg-emerald-100 transition-colors">
-                    <s.icon className="text-emerald-700" size={20} />
-                  </div>
-                  <h3 className="text-base font-bold mb-2 text-slate-900">{s.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{s.desc}</p>
+          <div className="grid md:grid-cols-3 gap-5">
+            <FadeIn delay={0} className="md:col-span-1">
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-emerald-200 hover:shadow-md transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center mb-5 flex-shrink-0">
+                  <Code2 className="text-white" size={20} />
                 </div>
-              </FadeIn>
-            ))}
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Web Applications</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">React, Next.js — responsive, performant, and accessible. From marketing sites to full SaaS platforms.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['Next.js', 'React', 'TypeScript', 'Tailwind'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={80}>
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
+                  <Smartphone className="text-slate-600" size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Mobile Apps</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">React Native, Flutter — cross-platform apps with native performance, built for low-bandwidth environments.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['React Native', 'Flutter', 'Offline-first'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={160}>
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
+                  <Database className="text-slate-600" size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Backend & APIs</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">Node.js, Python, PostgreSQL — scalable, secure, and cloud-native architectures with Row-Level Security.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['Node.js', 'PostgreSQL', 'Supabase', 'AWS'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -229,79 +425,150 @@ export default function Home() {
       <section id="work" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeIn>
-            <div className="text-center max-w-xl mx-auto mb-14">
-              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-2">Live Projects</p>
-              <h2 className="text-3xl font-extrabold mb-3 text-slate-900">Solutions That Ship</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">Real products used by real customers in Botswana and beyond.</p>
+            <div className="max-w-xl mb-14">
+              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-3">Live products</p>
+              <h2 className="text-4xl font-extrabold mb-4 text-slate-900 tracking-tight">Solutions that ship</h2>
+              <p className="text-slate-500 leading-relaxed">Real products used by real customers in Botswana and beyond.</p>
             </div>
           </FadeIn>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Keyat */}
-            <FadeIn delay={100}>
-              <Link href="/projects/keyat" className="group block bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-emerald-200 hover:shadow-md transition-all">
+
+            {/* ── Keyat ── */}
+            <FadeIn delay={80}>
+              <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-emerald-200 hover:shadow-lg transition-all duration-300">
+
+                <Link href="/projects/keyat" className="block">
+                  <div className="relative h-48 bg-gradient-to-br from-emerald-50 to-emerald-100 overflow-hidden flex items-end">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                      <Building2 size={120} className="text-emerald-800" />
+                    </div>
+                    <div className="absolute inset-0" style={{
+                      backgroundImage: `linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(5,150,105,0.06) 100%)`
+                    }} />
+                    {/* Replace with: <img src="/screenshots/keyat.png" alt="Keyat" className="absolute inset-0 w-full h-full object-cover object-top" /> */}
+                    <div className="relative z-10 p-5 w-full">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-xs text-emerald-700 font-semibold">Live · keyat.vercel.app</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
                 <div className="p-7">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Building2 className="text-emerald-700" size={20} />
+                  <Link href="/projects/keyat" className="block group/link">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Keyat</h3>
+                        <p className="text-sm text-slate-400 mt-0.5">Real Estate Platform · Botswana</p>
+                      </div>
+                      <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Building2 className="text-emerald-700" size={20} />
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Keyat</h3>
-                      <p className="text-xs text-slate-400">Real Estate Platform</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-5">
+                      Property marketplace with Orange Money payments, offline-first PWA architecture, and verified listings across Gaborone.
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Next.js', 'Supabase', 'PWA'].map(tech => (
+                          <span key={tech} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{tech}</span>
+                        ))}
+                      </div>
+                      <div className="flex items-center text-emerald-700 text-sm font-semibold gap-1 group-hover:gap-2 transition-all flex-shrink-0 ml-3">
+                        Explore <ArrowRight size={14} />
+                      </div>
                     </div>
-                    {/* Status dot — small, not a shouting badge */}
-                    <div className="ml-auto flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span className="text-xs text-slate-400 font-medium">Live</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-5">
-                    Property marketplace with Orange Money payments, offline-first PWA, and 29+ verified listings in Gaborone.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['Next.js', 'Supabase', 'PWA', 'Orange Money'].map(tech => (
-                      <span key={tech} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{tech}</span>
-                    ))}
-                  </div>
-                  <div className="mt-5 flex items-center text-emerald-700 text-sm font-semibold gap-1 group-hover:gap-2 transition-all">
-                    Explore Keyat <ArrowRight size={14} />
-                  </div>
+                  </Link>
+
+                  <ProjectActions
+                    project="keyat"
+                    siteUrl="https://keyat.vercel.app"
+                    onScreenshots={() => setModal({ type: 'screenshots', project: 'keyat' })}
+                    onVideo={() => setModal({ type: 'video', project: 'keyat' })}
+                  />
                 </div>
-              </Link>
+              </div>
             </FadeIn>
 
-            {/* PolicyBridge */}
-            <FadeIn delay={180}>
-              <Link href="/projects/policybridge" className="group block bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-blue-200 hover:shadow-md transition-all">
+            {/* ── PolicyBridge ── */}
+            <FadeIn delay={160}>
+              <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-200 hover:shadow-lg transition-all duration-300">
+
+                <Link href="/projects/policybridge" className="block">
+                  <div className="relative h-48 bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden flex items-end">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                      <Shield size={120} className="text-blue-800" />
+                    </div>
+                    <div className="absolute inset-0" style={{
+                      backgroundImage: `linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(37,99,235,0.06) 100%)`
+                    }} />
+                    {/* Replace with: <img src="/screenshots/policybridge.png" alt="PolicyBridge" className="absolute inset-0 w-full h-full object-cover object-top" /> */}
+                    <div className="relative z-10 p-5 w-full">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        <span className="text-xs text-blue-700 font-semibold">Beta · policybridge.vercel.app</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
                 <div className="p-7">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Shield className="text-blue-600" size={20} />
+                  <Link href="/projects/policybridge" className="block group/link">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">PolicyBridge</h3>
+                        <p className="text-sm text-slate-400 mt-0.5">Insurance Management SaaS</p>
+                      </div>
+                      <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Shield className="text-blue-600" size={20} />
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">PolicyBridge</h3>
-                      <p className="text-xs text-slate-400">Insurance Management SaaS</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-5">
+                      Multi-tenant platform for insurance brokers. Automates client management, policy tracking, and compliance PDF generation.
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Next.js', 'PostgreSQL', 'Puppeteer'].map(tech => (
+                          <span key={tech} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{tech}</span>
+                        ))}
+                      </div>
+                      <div className="flex items-center text-blue-600 text-sm font-semibold gap-1 group-hover:gap-2 transition-all flex-shrink-0 ml-3">
+                        Explore <ArrowRight size={14} />
+                      </div>
                     </div>
-                    <div className="ml-auto flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      <span className="text-xs text-slate-400 font-medium">Beta</span>
-                    </div>
-                  </div>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-5">
-                    Multi-tenant platform for insurance brokers. Automates client management, policy tracking, and compliance PDF generation.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['Next.js', 'PostgreSQL', 'Row-Level Security', 'Puppeteer'].map(tech => (
-                      <span key={tech} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{tech}</span>
-                    ))}
-                  </div>
-                  <div className="mt-5 flex items-center text-blue-600 text-sm font-semibold gap-1 group-hover:gap-2 transition-all">
-                    Explore PolicyBridge <ArrowRight size={14} />
-                  </div>
+                  </Link>
+
+                  <ProjectActions
+                    project="policybridge"
+                    siteUrl="https://policybridge.vercel.app"
+                    onScreenshots={() => setModal({ type: 'screenshots', project: 'policybridge' })}
+                    onVideo={() => setModal({ type: 'video', project: 'policybridge' })}
+                  />
                 </div>
-              </Link>
+              </div>
             </FadeIn>
           </div>
+
+          <FadeIn delay={240}>
+            <div className="mt-6 grid md:grid-cols-2 gap-4">
+              <a href="https://keyat.vercel.app" target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-between px-5 py-3.5 border border-dashed border-slate-200 rounded-xl hover:border-emerald-300 hover:bg-emerald-50/40 transition-all group">
+                <span className="text-sm text-slate-500 group-hover:text-emerald-700 font-medium">Visit keyat.vercel.app</span>
+                <ExternalLink size={14} className="text-slate-400 group-hover:text-emerald-600" />
+              </a>
+              <a href="https://policybridge.vercel.app" target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-between px-5 py-3.5 border border-dashed border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50/40 transition-all group">
+                <span className="text-sm text-slate-500 group-hover:text-blue-600 font-medium">Visit policybridge.vercel.app</span>
+                <ExternalLink size={14} className="text-slate-400 group-hover:text-blue-500" />
+              </a>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -309,53 +576,80 @@ export default function Home() {
       <section id="team" className="py-24 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeIn>
-            <div className="text-center max-w-xl mx-auto mb-14">
-              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-2">Our Team</p>
-              <h2 className="text-3xl font-extrabold mb-3 text-slate-900">The People Behind the Code</h2>
-              <p className="text-slate-500 text-sm leading-relaxed">A diverse, experienced team passionate about building for Africa.</p>
+            <div className="max-w-xl mb-14">
+              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-3">Our team</p>
+              <h2 className="text-4xl font-extrabold mb-4 text-slate-900 tracking-tight">The people behind the code</h2>
+              <p className="text-slate-500 leading-relaxed">A tight-knit team of engineers and designers who care deeply about building for Africa.</p>
             </div>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {teamMembers.map((member, i) => (
               <FadeIn key={i} delay={i * 60}>
-                <div className="bg-white border border-slate-200 rounded-xl p-6 text-center hover:border-slate-300 hover:shadow-sm transition-all">
-                  <div className={`w-16 h-16 mx-auto rounded-full ${member.color} flex items-center justify-center text-xl font-bold mb-4`}>
-                    {member.image}
+                <div className="bg-white border border-slate-200 rounded-xl p-6 hover:border-slate-300 hover:shadow-sm transition-all">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className={`w-12 h-12 rounded-full ${member.color} flex items-center justify-center text-sm font-bold flex-shrink-0`}>
+                      {member.initial}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900">{member.name}</h3>
+                      <p className="text-slate-500 text-xs font-medium mt-0.5">{member.role}</p>
+                    </div>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">{member.name}</h3>
-                  {/* Role in emerald — accent, not decoration */}
-                  <p className="text-emerald-700 text-xs font-semibold mt-0.5 mb-1">{member.role}</p>
-                  <p className="text-slate-400 text-xs">{member.expertise}</p>
+                  <p className="text-slate-400 text-xs leading-relaxed mb-3 border-l-2 border-slate-100 pl-3 italic">
+                    "{member.quote}"
+                  </p>
+                  <p className="text-slate-400 text-xs font-medium">{member.expertise}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
-          <div className="text-center mt-10">
-            <p className="text-slate-400 text-sm mb-3">Want to join our team?</p>
-            <a href="mailto:careers@bitroot.tech" className="inline-flex items-center gap-1.5 text-emerald-700 text-sm font-semibold hover:gap-2.5 transition-all">
-              View Open Positions <ArrowRight size={14} />
-            </a>
-          </div>
+          <FadeIn delay={400}>
+            <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 border border-dashed border-slate-200 rounded-xl bg-white/60">
+              <div className="flex-1">
+                <p className="text-slate-700 font-semibold text-sm">Want to join the team?</p>
+                <p className="text-slate-400 text-xs mt-0.5">We're always looking for engineers who care about Africa's digital future.</p>
+              </div>
+              <a href="mailto:careers@bitroot.tech"
+                className="inline-flex items-center gap-1.5 text-emerald-700 text-sm font-semibold hover:gap-2.5 transition-all flex-shrink-0">
+                View open positions <ArrowRight size={14} />
+              </a>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* ── CTA ─────────────────────────────────────────────────── */}
-      {/* No more solid green block — charcoal with green accent */}
-      <section className="bg-slate-900 text-white py-20">
+      <section className="bg-slate-900 text-white py-24">
         <div className="max-w-3xl mx-auto text-center px-6">
           <FadeIn>
-            {/* Small green accent line above heading */}
-            <div className="w-10 h-0.5 bg-emerald-500 mx-auto mb-6 rounded-full" />
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">Ready to Build Your Next Product?</h2>
-            <p className="text-slate-400 text-base mb-8">Let's discuss how we can help bring your vision to life.</p>
-            <a
-              href="mailto:hello@bitroot.tech"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-sm transition-colors shadow-sm"
-            >
-              Get in Touch <ArrowRight size={16} />
-            </a>
+            <div className="w-10 h-0.5 bg-emerald-500 mx-auto mb-7 rounded-full" />
+            <h2 className="text-4xl md:text-5xl font-extrabold mb-5 tracking-tight leading-tight">
+              Ready to build your
+              <br />next product?
+            </h2>
+            <p className="text-slate-400 text-lg mb-3 leading-relaxed">
+              We have capacity for <strong className="text-white">2 new projects</strong> in Q2 2026.
+            </p>
+            <p className="text-slate-500 text-sm mb-10">No commitment. Just a conversation about your problem.</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="mailto:hello@bitroot.tech"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold text-sm transition-colors shadow-sm"
+              >
+                Book a free 30-min call <ArrowRight size={16} />
+              </a>
+              <a
+                href="https://wa.me/26771234567"
+                className="inline-flex items-center gap-2 px-7 py-3.5 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white rounded-lg font-semibold text-sm transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                WhatsApp us
+              </a>
+            </div>
           </FadeIn>
         </div>
       </section>
