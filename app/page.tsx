@@ -375,15 +375,15 @@ export default function Home() {
                   >
                     {(
                       [
-                        { type: 'img' as const, src: '/clients/paragon-logo.png', alt: 'Paragon Insurance Brokers', height: '52px' },
+                        { type: 'img' as const, src: '/clients/paragon-logo.png', alt: 'Paragon Insurance Brokers', height: '50px', filter: 'grayscale(1) brightness(0.5)', opacity: 0.7 },
                         { type: 'text' as const, name: 'Winning Pillar' },
-                        { type: 'img' as const, src: '/clients/alfa-first-logo.png', alt: 'Alfa-First Projects', height: '58px' },
-                        { type: 'img' as const, src: '/clients/keyat-logo.png', alt: 'Keyat Real Estate', height: '28px' },
+                        { type: 'img' as const, src: '/clients/alfa-first-logo.png', alt: 'Alfa-First Projects', height: '54px', filter: 'grayscale(1) brightness(0.5)', opacity: 0.7 },
+                        { type: 'img' as const, src: '/clients/keyat-logo.png', alt: 'Keyat Real Estate', height: '34px', filter: 'none', opacity: 0.55 },
                         { type: 'text' as const, name: 'Botswana Savings Bank' },
-                        { type: 'text' as const, name: 'Innovate Botswana' },
                         { type: 'text' as const, name: 'Gaborone Tech Hub' },
+                        { type: 'text' as const, name: 'Innovate Botswana' },
                       ] as (
-                        | { type: 'img'; src: string; alt: string; height: string }
+                        | { type: 'img'; src: string; alt: string; height: string; filter: string; opacity: number }
                         | { type: 'text'; name: string }
                       )[]
                     ).map((item, i) =>
@@ -397,22 +397,23 @@ export default function Home() {
                             width: 'auto',
                             objectFit: 'contain',
                             flexShrink: 0,
-                            padding: '0 36px',
-                            filter: 'grayscale(1)',
-                            opacity: 0.7,
+                            padding: '0 40px',
+                            filter: item.filter,
+                            opacity: item.opacity,
                           }}
                         />
                       ) : (
                         <span
                           key={i}
                           style={{
-                            fontSize: '15px',
+                            fontSize: '13px',
                             fontWeight: 700,
                             color: '#94a3b8',
                             whiteSpace: 'nowrap',
                             flexShrink: 0,
-                            padding: '0 36px',
-                            letterSpacing: '-0.01em',
+                            padding: '0 40px',
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase' as const,
                           }}
                         >
                           {item.name}
