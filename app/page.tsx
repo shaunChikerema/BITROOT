@@ -253,12 +253,30 @@ const trustedClients = [
 ];
 
 const teamMembers = [
-  { name: 'Thabo Molefe', role: 'CTO & Co-founder', expertise: 'System Architecture · Cloud', initial: 'TM', color: 'bg-emerald-50 text-emerald-700', quote: 'I architect systems that survive production.' },
-  { name: 'Kabelo Dlamini', role: 'Lead Frontend Engineer', expertise: 'React · Next.js · PWA', initial: 'KD', color: 'bg-blue-50 text-blue-600', quote: 'Fast interfaces are respectful interfaces.' },
-  { name: 'Lebo Ncube', role: 'Backend & Database Lead', expertise: 'PostgreSQL · Supabase', initial: 'LN', color: 'bg-violet-50 text-violet-600', quote: 'Data models are the real product design.' },
-  { name: 'Tumelo Moeng', role: 'Mobile Developer', expertise: 'React Native · Flutter', initial: 'TM', color: 'bg-amber-50 text-amber-600', quote: 'Mobile-first means Africa-first.' },
-  { name: 'Goitseone Phiri', role: 'Product Manager', expertise: 'Fintech · Real Estate', initial: 'GP', color: 'bg-rose-50 text-rose-600', quote: 'I translate business problems into roadmaps.' },
-  { name: 'Mpho Sebina', role: 'UI/UX Designer', expertise: 'Design Systems · Accessibility', initial: 'MS', color: 'bg-cyan-50 text-cyan-600', quote: 'Accessible design is just good design.' },
+  {
+    name: 'Shaun Chikerema',
+    role: 'Co-founder & CEO',
+    expertise: 'Product Strategy · Business Development',
+    initial: 'SC',
+    color: 'bg-emerald-50 text-emerald-700',
+    quote: 'We build software that works for Africa, not just in Africa.',
+  },
+  {
+    name: 'Michael Kenosi',
+    role: 'Lead Engineer',
+    expertise: 'Full Stack · System Architecture',
+    initial: 'MK',
+    color: 'bg-blue-50 text-blue-600',
+    quote: 'Good engineering is invisible — it just works.',
+  },
+  {
+    name: 'William Tuahuku',
+    role: 'Software Engineer',
+    expertise: 'React · Node.js · Mobile',
+    initial: 'WT',
+    color: 'bg-violet-50 text-violet-600',
+    quote: 'Every line of code is a decision about the user.',
+  },
 ];
 
 // ── Page ───────────────────────────────────────────────────────────────────
@@ -286,7 +304,7 @@ export default function Home() {
       )}
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative pt-20 pb-24 bg-white overflow-hidden">
+      <section className="relative pt-20 pb-16 bg-white overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -305,32 +323,25 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative">
           <FadeIn>
             <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-2 border border-slate-200 bg-white text-slate-500 rounded-full px-3.5 py-1 text-xs font-medium mb-7 shadow-sm">
-                <MapPin size={11} className="text-emerald-600" />
-                Gaborone, Botswana · Building for Africa
-              </div>
-
               <h1 className="text-5xl md:text-[64px] font-extrabold tracking-tight mb-5 text-slate-900 leading-[1.08]">
                 Africa's software studio.
                 <br />
                 <span className="text-emerald-700">We build products that ship.</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-4">
-                Real estate marketplaces. Insurance platforms. Enterprise tools.
-                We design and develop software that solves real problems in emerging markets.
-              </p>
-
-              <p className="text-sm text-slate-400 mb-10">
-                We have capacity for <span className="text-slate-600 font-semibold">2 new projects</span> in Q2 2026. Let's talk this week.
+              <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
+                We turn complex problems into software that works — on time, on budget, built to scale.
               </p>
 
               <div className="flex flex-wrap justify-center gap-3">
                 <a
-                  href="mailto:hello@bitroot.tech"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold transition-all text-sm shadow-sm"
+                  href="https://wa.me/26776051623"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-lg font-semibold transition-all text-sm shadow-sm shadow-green-200"
                 >
-                  Book a 30-min call <ArrowRight size={15} />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="flex-shrink-0">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  WhatsApp us
                 </a>
                 <Link
                   href="#work"
@@ -341,25 +352,81 @@ export default function Home() {
               </div>
             </div>
           </FadeIn>
+        </div>
+      </section>
 
-          <FadeIn delay={200}>
-            <div className="mt-14 overflow-hidden">
-              <p className="text-center text-xs text-slate-400 mb-5 uppercase tracking-widest font-medium">Trusted by</p>
-              <div className="flex flex-wrap justify-center gap-3">
-                {trustedClients.map((client, i) => (
-                  <div key={i} className="flex items-center gap-2 px-3.5 py-2 border border-slate-100 rounded-lg bg-slate-50 hover:border-slate-200 transition-colors">
-                    <div className="w-5 h-5 rounded bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-[9px] flex-shrink-0">
-                      {client.name[0]}
-                    </div>
-                    <span className="text-slate-600 text-xs font-medium whitespace-nowrap">{client.name}</span>
-                    <span className="text-slate-300 text-[10px] hidden sm:block">{client.industry}</span>
+      {/* ── Trusted By Marquee ───────────────────────────────────── */}
+      <FadeIn delay={200}>
+        <div className="bg-white py-12">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to right, #ffffff 0%, transparent 100%)' }} />
+              <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to left, #ffffff 0%, transparent 100%)' }} />
+
+              <div style={{ display: 'flex', overflow: 'hidden' }}>
+                {([0, 1] as const).map((trackIdx) => (
+                  <div
+                    key={trackIdx}
+                    aria-hidden={trackIdx === 1}
+                    className="animate-marquee"
+                    style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                  >
+                    {(
+                      [
+                        { type: 'img' as const, src: '/clients/paragon-logo.png', alt: 'Paragon Insurance Brokers', height: '52px' },
+                        { type: 'text' as const, name: 'Winning Pillar' },
+                        { type: 'img' as const, src: '/clients/alfa-first-logo.png', alt: 'Alfa-First Projects', height: '58px' },
+                        { type: 'img' as const, src: '/clients/keyat-logo.png', alt: 'Keyat Real Estate', height: '28px' },
+                        { type: 'text' as const, name: 'Botswana Savings Bank' },
+                        { type: 'text' as const, name: 'Innovate Botswana' },
+                        { type: 'text' as const, name: 'Gaborone Tech Hub' },
+                      ] as (
+                        | { type: 'img'; src: string; alt: string; height: string }
+                        | { type: 'text'; name: string }
+                      )[]
+                    ).map((item, i) =>
+                      item.type === 'img' ? (
+                        <img
+                          key={i}
+                          src={item.src}
+                          alt={item.alt}
+                          style={{
+                            height: item.height,
+                            width: 'auto',
+                            objectFit: 'contain',
+                            flexShrink: 0,
+                            padding: '0 36px',
+                            filter: 'grayscale(1)',
+                            opacity: 0.7,
+                          }}
+                        />
+                      ) : (
+                        <span
+                          key={i}
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            color: '#94a3b8',
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0,
+                            padding: '0 36px',
+                            letterSpacing: '-0.01em',
+                          }}
+                        >
+                          {item.name}
+                        </span>
+                      )
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-          </FadeIn>
+            <p className="text-center text-xs text-slate-400 mt-6 tracking-wide">Trusted by businesses across Botswana</p>
+          </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* ── Services ────────────────────────────────────────────── */}
       <section id="services" className="py-24 bg-slate-50/60 border-y border-slate-100">
@@ -635,24 +702,39 @@ export default function Home() {
             <p className="text-slate-500 text-sm mb-10">No commitment. Just a conversation about your problem.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
-                href="mailto:hello@bitroot.tech"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold text-sm transition-colors shadow-sm"
+                href="https://wa.me/26776051623"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-lg font-semibold text-sm transition-colors shadow-sm"
               >
-                Book a free 30-min call <ArrowRight size={16} />
-              </a>
-              <a
-                href="https://wa.me/26771234567"
-                className="inline-flex items-center gap-2 px-7 py-3.5 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white rounded-lg font-semibold text-sm transition-colors"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="flex-shrink-0">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
-                WhatsApp us
+                WhatsApp us now
+              </a>
+              <a
+                href="mailto:hello@bitroot.tech"
+                className="inline-flex items-center gap-2 px-7 py-3.5 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white rounded-lg font-semibold text-sm transition-colors"
+              >
+                Send an email <ArrowRight size={16} />
               </a>
             </div>
           </FadeIn>
         </div>
       </section>
+
+      {/* ── Floating WhatsApp Button ─────────────────────────────── */}
+      <a
+        href="https://wa.me/26776051623"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white pl-4 pr-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+        style={{ boxShadow: '0 4px 24px rgba(37,211,102,0.35)' }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span className="text-sm font-semibold">Chat with us</span>
+      </a>
 
     </div>
   );
