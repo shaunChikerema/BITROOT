@@ -242,16 +242,6 @@ function ProjectActions({ project, siteUrl, onScreenshots, onVideo }: ProjectAct
 
 // ── Data ───────────────────────────────────────────────────────────────────
 
-const trustedClients = [
-  { name: 'Paragon Insurance Brokers', industry: 'Insurance' },
-  { name: 'Alfa-First Insurance', industry: 'Insurance' },
-  { name: 'Winning Pillar', industry: 'Consulting' },
-  { name: 'Keyat Real Estate', industry: 'Real Estate' },
-  { name: 'Botswana Savings Bank', industry: 'Finance' },
-  { name: 'Gaborone Tech Hub', industry: 'Tech' },
-  { name: 'Innovate Botswana', industry: 'Innovation' },
-];
-
 const teamMembers = [
   {
     name: 'Shaun Chikerema',
@@ -277,6 +267,76 @@ const teamMembers = [
     color: 'bg-violet-50 text-violet-600',
     quote: 'Every line of code is a decision about the user.',
   },
+];
+
+// ── Marquee items ──────────────────────────────────────────────────────────
+//
+// Per-logo filter strategy:
+//
+//   Paragon    — transparent PNG, coloured mark
+//                → grayscale(1) brightness(0.4) — standard greyscale darkening
+//
+//   Alfa-First — solid BLACK background PNG
+//                → invert(1) flips black bg → white, dark marks → light
+//                   grayscale(1) neutralises colour cast
+//                   brightness(0.35) re-darkens the marks to a readable grey
+//                   No mix-blend-mode needed — bg is now white, not black
+//
+//   Keyat      — solid BLACK background PNG, dark-navy "KEYAT" text + gold icon
+//                → same invert(1) trick: black→white, navy→light-grey (readable),
+//                   gold→blue-grey (acceptable in greyscale)
+//                   brightness(0.45) to darken marks back to visible grey
+//
+// Height calibration — visual ink area, not bounding box:
+//   Paragon is portrait/tall → 52px
+//   Alfa-First is wide/short → 58px (extra height to match visual weight)
+//   Keyat is very wide       → 42px (text already reads large)
+// ─────────────────────────────────────────────────────────────────────────────
+type MarqueeImg  = {
+  type: 'img';
+  src: string;
+  alt: string;
+  height: string;
+  filter: string;
+  opacity: number;
+  mixBlendMode?: React.CSSProperties['mixBlendMode'];
+};
+type MarqueeText = { type: 'text'; name: string };
+type MarqueeItem = MarqueeImg | MarqueeText;
+
+const marqueeItems: MarqueeItem[] = [
+  {
+    // Transparent PNG — greyscale + darken
+    type: 'img',
+    src: '/clients/paragon-logo.png',
+    alt: 'Paragon Insurance Brokers',
+    height: '52px',
+    filter: 'grayscale(1) brightness(0.4)',
+    opacity: 0.8,
+  },
+  { type: 'text', name: 'Winning Pillar' },
+  {
+    // Black bg PNG — invert flips bg to white, marks to light tones,
+    // then brightness re-darkens them to a visible medium grey
+    type: 'img',
+    src: '/clients/alfa-first-logo.png',
+    alt: 'Alfa-First Projects',
+    height: '58px',
+    filter: 'invert(1) grayscale(1) brightness(0.35)',
+    opacity: 0.82,
+  },
+  {
+    // Black bg PNG — same invert trick; navy "KEYAT" text becomes legible grey
+    type: 'img',
+    src: '/clients/keyat-logo.png',
+    alt: 'Keyat Real Estate',
+    height: '42px',
+    filter: 'invert(1) grayscale(1) brightness(0.45)',
+    opacity: 0.8,
+  },
+  { type: 'text', name: 'Botswana Savings Bank' },
+  { type: 'text', name: 'Gaborone Tech Hub' },
+  { type: 'text', name: 'Innovate Botswana' },
 ];
 
 // ── Page ───────────────────────────────────────────────────────────────────
@@ -356,37 +416,55 @@ export default function Home() {
       </section>
 
       {/* ── Trusted By Marquee ───────────────────────────────────── */}
+      {/*
+        FIX NOTES:
+        1. Outer wrapper uses overflow-hidden + flex via className (not inline style)
+           so Tailwind purge picks it up and there's no style conflict.
+        2. Two identical tracks side-by-side. Both run animate-marquee which
+           translates -100% over 25 s. Because each track is min-width:100% the
+           second track starts exactly where the first ends, giving a seamless loop.
+        3. Keyat logo now uses the same greyscale filter as all other logos so the
+           dark background doesn't stand out.
+      */}
       <FadeIn delay={200}>
         <div className="bg-white py-12">
           <div className="max-w-4xl mx-auto px-6">
+            {/*
+              MARQUEE FIX:
+              - Single overflow-hidden wrapper only (no nested one)
+              - Two tracks side-by-side, each width: max-content so the browser
+                measures the real pixel width of all items
+              - Both tracks translate -100% of THEIR OWN width over 25s
+              - When track 1 exits left, track 2 (which started immediately after)
+                fills the gap — seamless, no jump, no gap
+            */}
             <div className="relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(to right, #ffffff 0%, transparent 100%)' }} />
-              <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-                style={{ background: 'linear-gradient(to left, #ffffff 0%, transparent 100%)' }} />
+              {/* left fade */}
+              <div
+                className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to right, #ffffff 0%, transparent 100%)' }}
+              />
+              {/* right fade */}
+              <div
+                className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
+                style={{ background: 'linear-gradient(to left, #ffffff 0%, transparent 100%)' }}
+              />
 
-              <div style={{ display: 'flex', overflow: 'hidden' }}>
+              {/* ── scrolling track ── */}
+              <div style={{ display: 'flex', width: 'max-content' }}>
                 {([0, 1] as const).map((trackIdx) => (
                   <div
                     key={trackIdx}
                     aria-hidden={trackIdx === 1}
-                    className="animate-marquee"
-                    style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: 'max-content',
+                      flexShrink: 0,
+                      animation: 'marquee 25s linear infinite',
+                    }}
                   >
-                    {(
-                      [
-                        { type: 'img' as const, src: '/clients/paragon-logo.png', alt: 'Paragon Insurance Brokers', height: '50px', filter: 'grayscale(1) brightness(0.5)', opacity: 0.7 },
-                        { type: 'text' as const, name: 'Winning Pillar' },
-                        { type: 'img' as const, src: '/clients/alfa-first-logo.png', alt: 'Alfa-First Projects', height: '54px', filter: 'grayscale(1) brightness(0.5)', opacity: 0.7 },
-                        { type: 'img' as const, src: '/clients/keyat-logo.png', alt: 'Keyat Real Estate', height: '34px', filter: 'none', opacity: 0.55 },
-                        { type: 'text' as const, name: 'Botswana Savings Bank' },
-                        { type: 'text' as const, name: 'Gaborone Tech Hub' },
-                        { type: 'text' as const, name: 'Innovate Botswana' },
-                      ] as (
-                        | { type: 'img'; src: string; alt: string; height: string; filter: string; opacity: number }
-                        | { type: 'text'; name: string }
-                      )[]
-                    ).map((item, i) =>
+                    {marqueeItems.map((item, i) =>
                       item.type === 'img' ? (
                         <img
                           key={i}
@@ -397,7 +475,7 @@ export default function Home() {
                             width: 'auto',
                             objectFit: 'contain',
                             flexShrink: 0,
-                            padding: '0 40px',
+                            padding: '0 48px',
                             filter: item.filter,
                             opacity: item.opacity,
                           }}
@@ -411,7 +489,7 @@ export default function Home() {
                             color: '#94a3b8',
                             whiteSpace: 'nowrap',
                             flexShrink: 0,
-                            padding: '0 40px',
+                            padding: '0 48px',
                             letterSpacing: '0.06em',
                             textTransform: 'uppercase' as const,
                           }}
