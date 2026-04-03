@@ -6,7 +6,7 @@ import {
   ArrowRight, Code2, Database,
   Smartphone, Shield, Building2,
   ChevronRight, MapPin, ExternalLink,
-  Image as ImageIcon, Play, X, ChevronLeft, ChevronRight as ChevronRightIcon
+  Image as ImageIcon, Play, X, ChevronLeft, ChevronRight as ChevronRightIcon, Download
 } from 'lucide-react';
 
 // ── Hooks ──────────────────────────────────────────────────────────────────
@@ -46,20 +46,51 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
 // ── Modal Components ────────────────────────────────────────────────────────
 
 type ScreenshotModalProps = {
-  project: 'keyat' | 'policybridge';
+  project: 'keyat' | 'policybridge' | 'shaun' | 'paragon';
   onClose: () => void;
 };
 
-const projectScreenshots: Record<'keyat' | 'policybridge', { src: string; caption: string }[]> = {
+const projectScreenshots: Record<'keyat' | 'policybridge' | 'shaun' | 'paragon', { src: string; caption: string }[]> = {
   keyat: [
-    { src: '/screenshots/keyat-home.png', caption: 'Homepage — property listings across Gaborone' },
-    { src: '/screenshots/keyat-listing.png', caption: 'Listing detail with Orange Money payment flow' },
-    { src: '/screenshots/keyat-search.png', caption: 'Search & filter with offline-first PWA support' },
+    { src: '/screenshots/keyat/keyat-m-1.png',  caption: 'Homepage hero — Find your dream home' },
+    { src: '/screenshots/keyat/keyat-m-2.png',  caption: 'Hero slider — Find your apartment' },
+    { src: '/screenshots/keyat/keyat-m-3.png',  caption: 'Sign in — Google, Facebook & email auth' },
+    { src: '/screenshots/keyat/keyat-m-4.png',  caption: 'Create account — multi-provider sign-up' },
+    { src: '/screenshots/keyat/keyat-m-5.png',  caption: 'Tenant dashboard — featured & latest listings' },
+    { src: '/screenshots/keyat/keyat-m-6.png',  caption: 'Latest listings — real Gaborone properties' },
+    { src: '/screenshots/keyat/keyat-m-7.png',  caption: 'Landlord dashboard — 11 listings overview' },
+    { src: '/screenshots/keyat/keyat-m-8.png',  caption: 'My Properties — filterable listings manager' },
+    { src: '/screenshots/keyat/keyat-m-9.png',  caption: 'Agent dashboard — listings & market view' },
+    { src: '/screenshots/keyat/keyat-m-10.png', caption: 'Featured Properties — verified listings with pricing' },
   ],
   policybridge: [
     { src: '/screenshots/pb-dashboard.png', caption: 'Broker dashboard — client overview' },
     { src: '/screenshots/pb-policy.png', caption: 'Policy tracking & renewal management' },
     { src: '/screenshots/pb-pdf.png', caption: 'Auto-generated compliance PDF output' },
+  ],
+  paragon: [
+    { src: '/screenshots/paragon/paragon-1.png',  caption: 'Homepage hero — Compare Life Insurance from Botswana\'s Top Providers' },
+    { src: '/screenshots/paragon/paragon-2.png',  caption: 'Hero slide 2 — Get Your Quote Within 1 Hour' },
+    { src: '/screenshots/paragon/paragon-3.png',  caption: 'Our Partners — Compare Leading Insurers' },
+    { src: '/screenshots/paragon/paragon-4.png',  caption: 'Provider cards — Hollard Life & Bona Life' },
+    { src: '/screenshots/paragon/paragon-5.png',  caption: 'How It Works — 3-step simple process' },
+    { src: '/screenshots/paragon/paragon-6.png',  caption: 'Step 3 & CTA — Ready to Protect Your Family?' },
+    { src: '/screenshots/paragon/paragon-7.png',  caption: 'About page — Licensed by NBFIRA' },
+    { src: '/screenshots/paragon/paragon-8.png',  caption: 'Our Story — We work for you, not the insurers' },
+    { src: '/screenshots/paragon/paragon-9.png',  caption: 'Contact Us — Office & WhatsApp channels' },
+    { src: '/screenshots/paragon/paragon-10.png', caption: 'Location map — Kgale Terrace, Gaborone' },
+  ],
+  shaun: [
+    { src: '/screenshots/shaun-chikerema/01-hero.png', caption: 'Hero — name, tagline, and CTAs' },
+    { src: '/screenshots/shaun-chikerema/02-work-section.png', caption: 'Production Projects section header' },
+    { src: '/screenshots/shaun-chikerema/03-keyat-card.png', caption: 'Keyat project card with real estate screenshot' },
+    { src: '/screenshots/shaun-chikerema/04-paragon-card.png', caption: 'Paragon Insurance card with live screenshot' },
+    { src: '/screenshots/shaun-chikerema/05-blackdice-card.png', caption: 'BlackDice — Android music player card' },
+    { src: '/screenshots/shaun-chikerema/06-experience-section.png', caption: 'Background, education & core stack' },
+    { src: '/screenshots/shaun-chikerema/07-skills-fullstack.png', caption: 'Technical Skills — Full-Stack Web' },
+    { src: '/screenshots/shaun-chikerema/08-skills-mobile-backend.png', caption: 'Technical Skills — Mobile & Backend' },
+    { src: '/screenshots/shaun-chikerema/09-how-i-work.png', caption: '"How I Work" principles section' },
+    { src: '/screenshots/shaun-chikerema/10-contact.png', caption: 'Contact section — based in Gaborone' },
   ],
 };
 
@@ -71,7 +102,7 @@ const projectVideos: Record<'keyat' | 'policybridge', { url: string; title: stri
 function ScreenshotModal({ project, onClose }: ScreenshotModalProps) {
   const [idx, setIdx] = useState(0);
   const shots = projectScreenshots[project];
-  const accentColor = project === 'keyat' ? 'bg-emerald-600' : 'bg-blue-600';
+  const accentColor = project === 'keyat' ? 'bg-emerald-600' : project === 'policybridge' ? 'bg-blue-600' : project === 'paragon' ? 'bg-cyan-500' : 'bg-emerald-500';
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -93,7 +124,7 @@ function ScreenshotModal({ project, onClose }: ScreenshotModalProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
             <ImageIcon size={15} className="text-slate-400" />
-            <span className="text-sm font-semibold text-slate-700 capitalize">{project}</span>
+            <span className="text-sm font-semibold text-slate-700 capitalize">{project === 'shaun' ? 'Shaun Chikerema' : project === 'paragon' ? 'Paragon Insurance' : project}</span>
             <span className="text-xs text-slate-400">{idx + 1} / {shots.length}</span>
           </div>
           <button
@@ -105,14 +136,16 @@ function ScreenshotModal({ project, onClose }: ScreenshotModalProps) {
         </div>
 
         <div className="relative bg-slate-100 aspect-video flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 gap-3">
+          <img
+            src={shots[idx].src}
+            alt={shots[idx].caption}
+            className="w-full h-full object-cover object-top"
+            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 gap-3 -z-10">
             <ImageIcon size={48} strokeWidth={1} />
             <p className="text-xs font-medium text-slate-400">{shots[idx].src}</p>
-            <p className="text-[11px] text-slate-300 max-w-xs text-center">{shots[idx].caption}</p>
           </div>
-          {/* Uncomment once real screenshots exist:
-          <img src={shots[idx].src} alt={shots[idx].caption} className="w-full h-full object-cover object-top" />
-          */}
 
           {shots.length > 1 && (
             <>
@@ -339,12 +372,221 @@ const marqueeItems: MarqueeItem[] = [
   { type: 'text', name: 'Innovate Botswana' },
 ];
 
+// ── Keyat Slideshow ────────────────────────────────────────────────────────
+
+const KEYAT_SHOTS = [
+  { src: '/screenshots/keyat/keyat-m-1.png',  label: 'Hero' },
+  { src: '/screenshots/keyat/keyat-m-5.png',  label: 'Tenant' },
+  { src: '/screenshots/keyat/keyat-m-7.png',  label: 'Landlord' },
+  { src: '/screenshots/keyat/keyat-m-9.png',  label: 'Agent' },
+  { src: '/screenshots/keyat/keyat-m-10.png', label: 'Listings' },
+];
+
+function KeyatSlideshow({ onOpen }: { onOpen: () => void }) {
+  const [idx, setIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIdx(i => (i + 1) % KEYAT_SHOTS.length);
+        setFading(false);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  const goTo = (i: number) => {
+    if (i === idx) return;
+    setFading(true);
+    setTimeout(() => { setIdx(i); setFading(false); }, 300);
+  };
+
+  return (
+    <div className="relative h-96 lg:h-auto overflow-hidden bg-slate-100 cursor-pointer" onClick={onOpen}>
+      {KEYAT_SHOTS.map((shot, i) => (
+        <img
+          key={shot.src}
+          src={shot.src}
+          alt={shot.label}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-300"
+          style={{ opacity: i === idx ? (fading ? 0 : 1) : 0 }}
+        />
+      ))}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/60 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-slate-900/0 hover:bg-slate-900/30 transition-all duration-300 flex items-center justify-center group">
+        <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2 px-4 py-2.5 bg-white/90 backdrop-blur-sm rounded-xl text-slate-800 text-xs font-semibold shadow-lg">
+          <ImageIcon size={13} /> View all 10 screenshots
+        </span>
+      </div>
+      <div className="absolute bottom-4 inset-x-0 flex flex-col items-center gap-2 pointer-events-none">
+        <span className="text-[10px] font-semibold text-white/70 uppercase tracking-widest">{KEYAT_SHOTS[idx].label}</span>
+        <div className="flex gap-1.5 pointer-events-auto">
+          {KEYAT_SHOTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={e => { e.stopPropagation(); goTo(i); }}
+              className={`rounded-full transition-all duration-300 ${i === idx ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`}
+              aria-label={`Show screenshot ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Paragon Slideshow ──────────────────────────────────────────────────────
+
+const PARAGON_SHOTS = [
+  { src: '/screenshots/paragon/paragon-1.png',  label: 'Hero' },
+  { src: '/screenshots/paragon/paragon-3.png',  label: 'Partners' },
+  { src: '/screenshots/paragon/paragon-5.png',  label: 'Process' },
+  { src: '/screenshots/paragon/paragon-6.png',  label: 'CTA' },
+  { src: '/screenshots/paragon/paragon-9.png',  label: 'Contact' },
+];
+
+function ParagonSlideshow({ onOpen }: { onOpen: () => void }) {
+  const [idx, setIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIdx(i => (i + 1) % PARAGON_SHOTS.length);
+        setFading(false);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  const goTo = (i: number) => {
+    if (i === idx) return;
+    setFading(true);
+    setTimeout(() => { setIdx(i); setFading(false); }, 300);
+  };
+
+  return (
+    <div className="relative h-96 lg:h-auto overflow-hidden bg-slate-100 cursor-pointer" onClick={onOpen}>
+      {PARAGON_SHOTS.map((shot, i) => (
+        <img
+          key={shot.src}
+          src={shot.src}
+          alt={shot.label}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-300"
+          style={{ opacity: i === idx ? (fading ? 0 : 1) : 0 }}
+        />
+      ))}
+
+      {/* Gradient for dot legibility */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/60 to-transparent pointer-events-none" />
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-slate-900/0 hover:bg-slate-900/30 transition-all duration-300 flex items-center justify-center group">
+        <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2 px-4 py-2.5 bg-white/90 backdrop-blur-sm rounded-xl text-slate-800 text-xs font-semibold shadow-lg">
+          <ImageIcon size={13} /> View all 10 screenshots
+        </span>
+      </div>
+
+      {/* Dot nav + label */}
+      <div className="absolute bottom-4 inset-x-0 flex flex-col items-center gap-2 pointer-events-none">
+        <span className="text-[10px] font-semibold text-white/70 uppercase tracking-widest">{PARAGON_SHOTS[idx].label}</span>
+        <div className="flex gap-1.5 pointer-events-auto">
+          {PARAGON_SHOTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={e => { e.stopPropagation(); goTo(i); }}
+              className={`rounded-full transition-all duration-300 ${i === idx ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`}
+              aria-label={`Show screenshot ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Portfolio Slideshow ────────────────────────────────────────────────────
+
+const SLIDESHOW_SHOTS = [
+  { src: '/screenshots/shaun-chikerema/03-keyat-card.png',        label: 'Projects' },
+  { src: '/screenshots/shaun-chikerema/01-hero.png',              label: 'Hero' },
+  { src: '/screenshots/shaun-chikerema/09-how-i-work.png',        label: 'How I Work' },
+  { src: '/screenshots/shaun-chikerema/07-skills-fullstack.png',  label: 'Skills' },
+  { src: '/screenshots/shaun-chikerema/10-contact.png',           label: 'Contact' },
+];
+
+function PortfolioSlideshow({ onOpen }: { onOpen: () => void }) {
+  const [idx, setIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  // Auto-rotate every 3 s
+  useEffect(() => {
+    const t = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIdx(i => (i + 1) % SLIDESHOW_SHOTS.length);
+        setFading(false);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  const goTo = (i: number) => {
+    if (i === idx) return;
+    setFading(true);
+    setTimeout(() => { setIdx(i); setFading(false); }, 300);
+  };
+
+  return (
+    <div className="relative h-96 lg:h-auto overflow-hidden order-last lg:order-first bg-slate-900 cursor-pointer" onClick={onOpen}>
+      {/* Images — stack all, show active */}
+      {SLIDESHOW_SHOTS.map((shot, i) => (
+        <img
+          key={shot.src}
+          src={shot.src}
+          alt={shot.label}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-300"
+          style={{ opacity: i === idx ? (fading ? 0 : 1) : 0 }}
+        />
+      ))}
+
+      {/* Dark gradient at bottom for legibility */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/70 to-transparent pointer-events-none" />
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-slate-900/0 hover:bg-slate-900/30 transition-all duration-300 flex items-center justify-center group">
+        <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2 px-4 py-2.5 bg-white/90 backdrop-blur-sm rounded-xl text-slate-800 text-xs font-semibold shadow-lg">
+          <ImageIcon size={13} /> View all 10 screenshots
+        </span>
+      </div>
+
+      {/* Dot nav + label */}
+      <div className="absolute bottom-4 inset-x-0 flex flex-col items-center gap-2 pointer-events-none">
+        <span className="text-[10px] font-semibold text-white/70 uppercase tracking-widest">{SLIDESHOW_SHOTS[idx].label}</span>
+        <div className="flex gap-1.5 pointer-events-auto">
+          {SLIDESHOW_SHOTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={e => { e.stopPropagation(); goTo(i); }}
+              className={`rounded-full transition-all duration-300 ${i === idx ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`}
+              aria-label={`Show screenshot ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────
 
 export default function Home() {
   const [modal, setModal] = useState<{
     type: 'screenshots' | 'video';
-    project: 'keyat' | 'policybridge';
+    project: 'keyat' | 'policybridge' | 'shaun' | 'paragon';
   } | null>(null);
 
   useEffect(() => {
@@ -643,21 +885,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right — visual */}
-                <div className="relative h-96 lg:h-auto bg-gradient-to-br from-emerald-50 via-emerald-50 to-teal-100 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-[0.06]">
-                    <Building2 size={200} className="text-emerald-900" />
-                  </div>
-                  <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(16,185,129,0.15) 0%, transparent 60%)' }} />
-                  {/* Swap for real screenshot: */}
-                  {/* <img src="/screenshots/keyat/keyat-1.jpg" alt="Keyat" className="absolute inset-0 w-full h-full object-cover object-top" /> */}
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/60 shadow-sm">
-                      <p className="text-xs font-bold text-slate-700 mb-1">keyat.vercel.app</p>
-                      <p className="text-[11px] text-slate-400">Real estate · Gaborone, Botswana</p>
-                    </div>
-                  </div>
-                </div>
+                {/* Right — auto-rotating slideshow */}
+                <KeyatSlideshow onOpen={() => setModal({ type: 'screenshots', project: 'keyat' })} />
               </div>
             </FadeIn>
 
@@ -772,12 +1001,211 @@ export default function Home() {
                     >
                       <ExternalLink size={12} /> Visit Site
                     </a>
+                    <button
+                      onClick={() => setModal({ type: 'screenshots', project: 'paragon' })}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
+                    >
+                      <ImageIcon size={12} /> Screenshots
+                    </button>
                   </div>
                 </div>
 
-                {/* Right — visual with real screenshot */}
-                <div className="relative h-96 lg:h-auto overflow-hidden">
-                  <img src="/screenshots/paragon/paragon-1.png" alt="Paragon Insurance Brokers" className="absolute inset-0 w-full h-full object-cover object-top" />
+                {/* Right — auto-rotating slideshow */}
+                <ParagonSlideshow onOpen={() => setModal({ type: 'screenshots', project: 'paragon' })} />
+              </div>
+            </FadeIn>
+
+            {/* ── 04 · BlackDice ── */}
+            <FadeIn delay={240}>
+              <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-red-200 hover:shadow-xl transition-all duration-500 bg-white">
+
+                {/* Left — dark visual */}
+                <div className="relative h-96 lg:h-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden order-last lg:order-first">
+                  <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 40% 50%, rgba(230,57,70,0.2) 0%, transparent 60%)' }} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-24 h-24 rounded-full border-4 border-red-500/30 flex items-center justify-center" style={{ background: 'radial-gradient(circle, rgba(230,57,70,0.15) 0%, transparent 70%)' }}>
+                        <div className="w-16 h-16 rounded-full bg-slate-700 border-2 border-slate-600 flex items-center justify-center">
+                          <div className="w-4 h-4 rounded-full bg-slate-500" />
+                        </div>
+                      </div>
+                      <div className="flex gap-1 items-end">
+                        {[3,5,4,7,5,3,6,4,5,3,6,5].map((h, i) => (
+                          <div key={i} className="w-1 rounded-full bg-red-500/60" style={{ height: h * 4 }} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                      <p className="text-xs font-bold text-white mb-1">BlackDice</p>
+                      <p className="text-[11px] text-slate-400">Android · Offline-first music player</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right — info */}
+                <div className="flex flex-col justify-between p-8 lg:p-10">
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="text-xs font-bold text-slate-300 tracking-widest">04</span>
+                      <span className="h-px flex-1 bg-slate-100" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 border border-red-100">
+                        <Smartphone size={10} className="text-red-500" />
+                        <span className="text-[11px] font-semibold text-red-600">Android App</span>
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Mobile</span>
+                    </div>
+
+                    <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">BlackDice</h3>
+                    <p className="text-sm text-slate-400 font-medium mb-5">Local Music Player · Android</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-7 max-w-sm">
+                      Offline-first Android music player with a vinyl-themed UI, EQ visualizer synced to playback, and full queue management. No internet required.
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-8">
+                      {['React Native', 'Expo SDK 54', 'TypeScript', 'expo-av', 'expo-media-library'].map(t => (
+                        <span key={t} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-lg font-medium">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <a
+                      href="https://expo.dev/artifacts/eas/eca90fc4-8707-470e-b804-4ae59e23edb1.apk"
+                      target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition-all"
+                    >
+                      <Download size={12} /> Download APK
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* ── 05 · Yonder ── */}
+            <FadeIn delay={300}>
+              <div className="group relative grid lg:grid-cols-[1fr_420px] rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-200 hover:shadow-xl transition-all duration-500 bg-white">
+
+                {/* Left — info */}
+                <div className="flex flex-col justify-between p-8 lg:p-10">
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="text-xs font-bold text-slate-300 tracking-widest">05</span>
+                      <span className="h-px flex-1 bg-slate-100" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-100">
+                        <Smartphone size={10} className="text-amber-500" />
+                        <span className="text-[11px] font-semibold text-amber-700">iOS & Android</span>
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Mobile</span>
+                    </div>
+
+                    <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Yonder</h3>
+                    <p className="text-sm text-slate-400 font-medium mb-5">Public Domain Audiobook Player</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-7 max-w-sm">
+                      Streams real LibriVox recordings from archive.org with chapter navigation, playback speed control, sleep timer, bookmarks, and a warm amber-themed UI.
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-8">
+                      {['React Native', 'Expo SDK 54', 'TypeScript', 'expo-av', 'AsyncStorage'].map(t => (
+                        <span key={t} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-lg font-medium">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-400 text-xs font-semibold rounded-xl cursor-not-allowed">
+                      <Smartphone size={12} /> Coming to App Store
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right — warm visual */}
+                <div className="relative h-96 lg:h-auto bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
+                  <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 60% 40%, rgba(245,166,35,0.2) 0%, transparent 60%)' }} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="w-20 h-28 bg-amber-800/10 rounded-lg border border-amber-200 flex items-center justify-center">
+                        <div className="text-3xl">📖</div>
+                      </div>
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="w-32 h-1.5 bg-amber-200 rounded-full overflow-hidden">
+                          <div className="w-1/2 h-full bg-amber-500 rounded-full" />
+                        </div>
+                        <p className="text-[10px] text-amber-600 font-medium">Chapter 4 of 12</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-amber-100 shadow-sm">
+                      <p className="text-xs font-bold text-slate-700 mb-1">Yonder</p>
+                      <p className="text-[11px] text-slate-400">8 audiobooks · LibriVox · Free forever</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* ── 06 · Shaun Chikerema — Portfolio ── */}
+            <FadeIn delay={360}>
+              <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-200 hover:shadow-xl transition-all duration-500 bg-white">
+
+                {/* Left — auto-rotating slideshow */}
+                <PortfolioSlideshow onOpen={() => setModal({ type: 'screenshots', project: 'shaun' })} />
+
+                {/* Right — info */}
+                <div className="flex flex-col justify-between p-8 lg:p-10">
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="text-xs font-bold text-slate-300 tracking-widest">06</span>
+                      <span className="h-px flex-1 bg-slate-100" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[11px] font-semibold text-emerald-700">Live</span>
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Client Work</span>
+                    </div>
+
+                    <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Shaun Chikerema</h3>
+                    <p className="text-sm text-slate-400 font-medium mb-5">Developer Portfolio · Personal Brand Site</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-7 max-w-sm">
+                      Custom portfolio for BITROOT's founder — a bespoke design system, interactive screenshot lightbox, Framer Motion animations, and a fully responsive mobile layout.
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-8">
+                      {['Next.js 15', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Vercel'].map(t => (
+                        <span key={t} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-lg font-medium">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <a
+                      href="https://shaun-chikerema.vercel.app"
+                      target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-white text-xs font-semibold rounded-xl transition-all"
+                      style={{ background: '#3ECF8E' }}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                    >
+                      <ExternalLink size={12} /> Visit Site
+                    </a>
+                    <button
+                      onClick={() => setModal({ type: 'screenshots', project: 'shaun' })}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
+                    >
+                      <ImageIcon size={12} /> Screenshots
+                    </button>
+                    <Link
+                      href="/projects/shaun-chikerema"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
+                    >
+                      Case Study <ArrowRight size={12} />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </FadeIn>
