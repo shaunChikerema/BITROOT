@@ -1084,15 +1084,77 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 05 · Yonder ── */}
+            {/* ── 05 · Shaun Chikerema — Portfolio ── */}
             <FadeIn delay={300}>
+              <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-200 hover:shadow-xl transition-all duration-500 bg-white">
+
+                {/* Left — auto-rotating slideshow */}
+                <PortfolioSlideshow onOpen={() => setModal({ type: 'screenshots', project: 'shaun' })} />
+
+                {/* Right — info */}
+                <div className="flex flex-col justify-between p-8 lg:p-10">
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="text-xs font-bold text-slate-300 tracking-widest">05</span>
+                      <span className="h-px flex-1 bg-slate-100" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[11px] font-semibold text-emerald-700">Live</span>
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Client Work</span>
+                    </div>
+
+                    <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Shaun Chikerema</h3>
+                    <p className="text-sm text-slate-400 font-medium mb-5">Developer Portfolio · Personal Brand Site</p>
+
+                    <p className="text-slate-500 text-sm leading-relaxed mb-7 max-w-sm">
+                      Custom portfolio for BITROOT's founder — a bespoke design system, interactive screenshot lightbox, Framer Motion animations, and a fully responsive mobile layout.
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-8">
+                      {['Next.js 15', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Vercel'].map(t => (
+                        <span key={t} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-lg font-medium">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <a
+                      href="https://shaun-chikerema.vercel.app"
+                      target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-white text-xs font-semibold rounded-xl transition-all"
+                      style={{ background: '#3ECF8E' }}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                    >
+                      <ExternalLink size={12} /> Visit Site
+                    </a>
+                    <button
+                      onClick={() => setModal({ type: 'screenshots', project: 'shaun' })}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
+                    >
+                      <ImageIcon size={12} /> Screenshots
+                    </button>
+                    <Link
+                      href="/projects/shaun-chikerema"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
+                    >
+                      Case Study <ArrowRight size={12} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* ── 06 · Yonder ── */}
+            <FadeIn delay={360}>
               <div className="group relative grid lg:grid-cols-[1fr_420px] rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-200 hover:shadow-xl transition-all duration-500 bg-white">
 
                 {/* Left — info */}
                 <div className="flex flex-col justify-between p-8 lg:p-10">
                   <div>
                     <div className="flex items-center gap-3 mb-6">
-                      <span className="text-xs font-bold text-slate-300 tracking-widest">05</span>
+                      <span className="text-xs font-bold text-slate-300 tracking-widest">06</span>
                       <span className="h-px flex-1 bg-slate-100" />
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-100">
                         <Smartphone size={10} className="text-amber-500" />
@@ -1148,67 +1210,6 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 06 · Shaun Chikerema — Portfolio ── */}
-            <FadeIn delay={360}>
-              <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-200 hover:shadow-xl transition-all duration-500 bg-white">
-
-                {/* Left — auto-rotating slideshow */}
-                <PortfolioSlideshow onOpen={() => setModal({ type: 'screenshots', project: 'shaun' })} />
-
-                {/* Right — info */}
-                <div className="flex flex-col justify-between p-8 lg:p-10">
-                  <div>
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="text-xs font-bold text-slate-300 tracking-widest">06</span>
-                      <span className="h-px flex-1 bg-slate-100" />
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[11px] font-semibold text-emerald-700">Live</span>
-                      </span>
-                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Client Work</span>
-                    </div>
-
-                    <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Shaun Chikerema</h3>
-                    <p className="text-sm text-slate-400 font-medium mb-5">Developer Portfolio · Personal Brand Site</p>
-
-                    <p className="text-slate-500 text-sm leading-relaxed mb-7 max-w-sm">
-                      Custom portfolio for BITROOT's founder — a bespoke design system, interactive screenshot lightbox, Framer Motion animations, and a fully responsive mobile layout.
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5 mb-8">
-                      {['Next.js 15', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Vercel'].map(t => (
-                        <span key={t} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-lg font-medium">{t}</span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    <a
-                      href="https://shaun-chikerema.vercel.app"
-                      target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 text-white text-xs font-semibold rounded-xl transition-all"
-                      style={{ background: '#3ECF8E' }}
-                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-                    >
-                      <ExternalLink size={12} /> Visit Site
-                    </a>
-                    <button
-                      onClick={() => setModal({ type: 'screenshots', project: 'shaun' })}
-                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
-                    >
-                      <ImageIcon size={12} /> Screenshots
-                    </button>
-                    <Link
-                      href="/projects/shaun-chikerema"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 text-xs font-semibold rounded-xl transition-all"
-                    >
-                      Case Study <ArrowRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
 
           </div>
         </div>
