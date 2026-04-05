@@ -52,11 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Logo */}
               <Link href="/" className="flex items-center z-50" onClick={() => setIsMobileMenuOpen(false)}>
-                <img
-                  src="/bitroot-logo-light.png"
-                  alt="BITROOT"
-                  className="h-8 w-auto"
-                />
+                <img src="/bitroot-logo-light.png" alt="BITROOT" className="h-14 w-auto" />
               </Link>
 
               {/* Desktop Nav */}
@@ -140,12 +136,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
             <div className="grid md:grid-cols-4 gap-12 mb-12">
               <div className="md:col-span-2">
+                {/* Dark version of logo in footer */}
                 <div className="mb-4">
-                  <img
-                    src="/bitroot-logo-dark.png"
-                    alt="BITROOT"
-                    className="h-8 w-auto"
-                  />
+                  <img src="/bitroot-logo-dark.png" alt="BITROOT" className="h-14 w-auto" />
                 </div>
                 <p className="text-slate-400 leading-relaxed mb-4 max-w-xs text-sm">
                   Africa's software studio. We build enterprise-grade web and mobile applications for businesses across the continent.
