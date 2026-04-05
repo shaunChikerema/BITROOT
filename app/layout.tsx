@@ -5,64 +5,6 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
-const FONT = "'Arial Black','Helvetica Neue',Arial,sans-serif";
-
-/* Inline SVG logo — canvas-measured O positions, light bg version */
-function BitrootLogo({ dark = false }: { dark?: boolean }) {
-  const textFill  = dark ? '#ffffff' : '#0f172a';
-  const circleBg  = dark ? '#0f172a' : '#ffffff';
-  // Letter positions measured via canvas at 28px Arial Black
-  // B:x=0 w=21, I:x=21 w=9, T:x=30 w=19, R:x=49 w=21, O1:x=70 w=20, O2:x=90 w=20, T:x=110 w=19
-  const scale = 28;
-  const letters = [
-    { ch: 'B', x: 0,   w: 21 },
-    { ch: 'I', x: 21,  w: 9  },
-    { ch: 'T', x: 30,  w: 19 },
-    { ch: 'R', x: 49,  w: 21 },
-    { ch: 'O', x: 70,  w: 20 },
-    { ch: 'O', x: 90,  w: 20 },
-    { ch: 'T', x: 110, w: 19 },
-  ];
-  const totalW = 130;
-  const cy = 19;
-
-  return (
-    <svg
-      width={totalW}
-      height={scale}
-      viewBox={`0 0 ${totalW} ${scale}`}
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Bitroot"
-    >
-      {letters.map((l, i) => {
-        if (l.ch === 'O') {
-          const cx = l.x + l.w / 2;
-          const r  = l.w / 2 - 1;
-          return (
-            <g key={i}>
-              <circle cx={cx} cy={cy} r={r} fill={circleBg} stroke="#3ECF8E" strokeWidth="2.2" />
-              <circle cx={cx} cy={cy} r={r * 0.3} fill="#3ECF8E" />
-            </g>
-          );
-        }
-        return (
-          <text
-            key={i}
-            x={l.x}
-            y={scale - 2}
-            fontFamily={FONT}
-            fontSize={scale}
-            fontWeight="900"
-            fill={textFill}
-          >
-            {l.ch}
-          </text>
-        );
-      })}
-    </svg>
-  );
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled]             = useState(false);
@@ -110,7 +52,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Logo */}
               <Link href="/" className="flex items-center z-50" onClick={() => setIsMobileMenuOpen(false)}>
-                <BitrootLogo dark={false} />
+                <img
+                  src="/bitroot-logo-light.png"
+                  alt="BITROOT"
+                  className="h-8 w-auto"
+                />
               </Link>
 
               {/* Desktop Nav */}
@@ -194,9 +140,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
             <div className="grid md:grid-cols-4 gap-12 mb-12">
               <div className="md:col-span-2">
-                {/* Dark version of logo in footer */}
                 <div className="mb-4">
-                  <BitrootLogo dark={true} />
+                  <img
+                    src="/bitroot-logo-dark.png"
+                    alt="BITROOT"
+                    className="h-8 w-auto"
+                  />
                 </div>
                 <p className="text-slate-400 leading-relaxed mb-4 max-w-xs text-sm">
                   Africa's software studio. We build enterprise-grade web and mobile applications for businesses across the continent.
