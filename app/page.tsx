@@ -601,7 +601,7 @@ export default function Home() {
       {modal?.type === 'screenshots' && (
         <ScreenshotModal project={modal.project} onClose={() => setModal(null)} />
       )}
-      {modal?.type === 'video' && (
+      {modal?.type === 'video' && (modal.project === 'keyat' || modal.project === 'policybridge') && (
         <VideoModal project={modal.project} onClose={() => setModal(null)} />
       )}
 
