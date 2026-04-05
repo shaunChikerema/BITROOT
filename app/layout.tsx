@@ -5,10 +5,68 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
+const FONT = "'Arial Black','Helvetica Neue',Arial,sans-serif";
+
+/* Inline SVG logo — canvas-measured O positions, light bg version */
+function BitrootLogo({ dark = false }: { dark?: boolean }) {
+  const textFill  = dark ? '#ffffff' : '#0f172a';
+  const circleBg  = dark ? '#0f172a' : '#ffffff';
+  // Letter positions measured via canvas at 28px Arial Black
+  // B:x=0 w=21, I:x=21 w=9, T:x=30 w=19, R:x=49 w=21, O1:x=70 w=20, O2:x=90 w=20, T:x=110 w=19
+  const scale = 28;
+  const letters = [
+    { ch: 'B', x: 0,   w: 21 },
+    { ch: 'I', x: 21,  w: 9  },
+    { ch: 'T', x: 30,  w: 19 },
+    { ch: 'R', x: 49,  w: 21 },
+    { ch: 'O', x: 70,  w: 20 },
+    { ch: 'O', x: 90,  w: 20 },
+    { ch: 'T', x: 110, w: 19 },
+  ];
+  const totalW = 130;
+  const cy = 19;
+
+  return (
+    <svg
+      width={totalW}
+      height={scale}
+      viewBox={`0 0 ${totalW} ${scale}`}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Bitroot"
+    >
+      {letters.map((l, i) => {
+        if (l.ch === 'O') {
+          const cx = l.x + l.w / 2;
+          const r  = l.w / 2 - 1;
+          return (
+            <g key={i}>
+              <circle cx={cx} cy={cy} r={r} fill={circleBg} stroke="#3ECF8E" strokeWidth="2.2" />
+              <circle cx={cx} cy={cy} r={r * 0.3} fill="#3ECF8E" />
+            </g>
+          );
+        }
+        return (
+          <text
+            key={i}
+            x={l.x}
+            y={scale - 2}
+            fontFamily={FONT}
+            fontSize={scale}
+            fontWeight="900"
+            fill={textFill}
+          >
+            {l.ch}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [isScrolled, setIsScrolled]             = useState(false);
+  const [isProductsOpen, setIsProductsOpen]     = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -21,8 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }, [isMobileMenuOpen]);
 
   const productLinks = [
-    { href: '/projects/keyat', label: 'Keyat', desc: 'Real Estate Platform', color: 'bg-emerald-50 text-emerald-700' },
-    { href: '/projects/policybridge', label: 'PolicyBridge', desc: 'Insurance SaaS', color: 'bg-blue-50 text-blue-600' },
+    { href: '/projects/keyat',        label: 'Keyat',        desc: 'Real Estate Platform', color: 'bg-emerald-50 text-emerald-700' },
+    { href: '/projects/policybridge', label: 'PolicyBridge', desc: 'Insurance SaaS',       color: 'bg-blue-50 text-blue-600'       },
   ];
 
   return (
@@ -31,6 +89,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>BITROOT — Africa's Software Studio | Web & Mobile App Development</title>
         <meta name="description" content="BITROOT builds world-class web and mobile applications for African businesses. Real estate, fintech, and enterprise software from Gaborone, Botswana." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#3ECF8E" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
@@ -45,14 +109,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex justify-between items-center h-16">
 
               {/* Logo */}
-              <Link href="/" className="flex items-center gap-2.5 z-50" onClick={() => setIsMobileMenuOpen(false)}>
-                <div className="w-7 h-7 bg-emerald-600 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold text-xs tracking-tight">BR</span>
-                </div>
-                <span className="text-lg font-bold text-slate-900 tracking-tight">BITROOT</span>
+              <Link href="/" className="flex items-center z-50" onClick={() => setIsMobileMenuOpen(false)}>
+                <BitrootLogo dark={false} />
               </Link>
 
-              {/* Desktop Nav — removed redundant "Home" link */}
+              {/* Desktop Nav */}
               <div className="hidden md:flex items-center gap-0.5">
                 <div className="relative" onMouseEnter={() => setIsProductsOpen(true)} onMouseLeave={() => setIsProductsOpen(false)}>
                   <button className="flex items-center gap-1 px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
@@ -79,16 +140,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/#services" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
                   Services
                 </Link>
-
                 <Link href="/#team" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
                   Team
                 </Link>
-
                 <Link href="/blog" className="px-3.5 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-sm font-medium">
                   Blog
                 </Link>
-
-                {/* CTA — solid, not outlined, because the bar above is too subtle alone */}
                 <a
                   href="https://wa.me/26776051623"
                   className="ml-2 inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white px-4 py-1.5 rounded-lg font-semibold transition-all text-sm"
@@ -113,8 +170,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="flex flex-col gap-1">
                 {[
                   { href: '/#services', label: 'Services' },
-                  { href: '/#team', label: 'Team' },
-                  { href: '/blog', label: 'Blog' },
+                  { href: '/#team',     label: 'Team'     },
+                  { href: '/blog',      label: 'Blog'     },
                   ...productLinks.map(p => ({ href: p.href, label: p.label }))
                 ].map(link => (
                   <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)}
@@ -137,16 +194,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
             <div className="grid md:grid-cols-4 gap-12 mb-12">
               <div className="md:col-span-2">
-                <div className="flex items-center gap-2.5 mb-4">
-                  <div className="w-7 h-7 bg-emerald-600 rounded-md flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">BR</span>
-                  </div>
-                  <span className="text-lg font-bold tracking-tight">BITROOT</span>
+                {/* Dark version of logo in footer */}
+                <div className="mb-4">
+                  <BitrootLogo dark={true} />
                 </div>
                 <p className="text-slate-400 leading-relaxed mb-4 max-w-xs text-sm">
                   Africa's software studio. We build enterprise-grade web and mobile applications for businesses across the continent.
                 </p>
-                {/* Physical address — signals legitimacy */}
                 <p className="text-slate-500 text-xs mb-5 leading-relaxed">
                   Plot 54358, Gaborone Central<br />
                   Gaborone, Botswana
@@ -180,7 +234,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li><Link href="/#team" className="text-slate-400 hover:text-white transition-colors text-sm">Our Team</Link></li>
                   <li><Link href="/blog" className="text-slate-400 hover:text-white transition-colors text-sm">Blog</Link></li>
                   <li><a href="mailto:careers@bitroot.tech" className="text-slate-400 hover:text-white transition-colors text-sm">Careers</a></li>
-                  {/* LinkedIn placeholder — add real URL */}
                   <li><a href="https://linkedin.com/company/bitroot" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors text-sm">LinkedIn ↗</a></li>
                 </ul>
               </div>
