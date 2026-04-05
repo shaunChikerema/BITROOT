@@ -9,7 +9,7 @@ import {
   Image as ImageIcon, Play, X, ChevronLeft, ChevronRight as ChevronRightIcon, Download
 } from 'lucide-react';
 
-// ── Hooks ──────────────────────────────────────────────────────────────────
+// -- Hooks ------------------------------------------------------------------
 
 function useInView() {
   const [isInView, setIsInView] = useState(false);
@@ -43,7 +43,7 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
   );
 }
 
-// ── Modal Components ────────────────────────────────────────────────────────
+// -- Modal Components --------------------------------------------------------
 
 type ScreenshotModalProps = {
   project: 'keyat' | 'policybridge' | 'shaun' | 'paragon';
@@ -228,7 +228,7 @@ function VideoModal({ project, onClose }: { project: 'keyat' | 'policybridge'; o
   );
 }
 
-// ── Project Action Buttons ─────────────────────────────────────────────────
+// -- Project Action Buttons -------------------------------------------------
 
 type ProjectActionsProps = {
   project: 'keyat' | 'policybridge';
@@ -273,7 +273,7 @@ function ProjectActions({ project, siteUrl, onScreenshots, onVideo }: ProjectAct
   );
 }
 
-// ── Data ───────────────────────────────────────────────────────────────────
+// -- Data -------------------------------------------------------------------
 
 const teamMembers = [
   {
@@ -302,7 +302,7 @@ const teamMembers = [
   },
 ];
 
-// ── Marquee items ──────────────────────────────────────────────────────────
+// -- Marquee items ----------------------------------------------------------
 //
 // Per-logo filter strategy:
 //
@@ -324,7 +324,7 @@ const teamMembers = [
 //   Paragon is portrait/tall → 52px
 //   Alfa-First is wide/short → 58px (extra height to match visual weight)
 //   Keyat is very wide       → 42px (text already reads large)
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 type MarqueeImg  = {
   type: 'img';
   src: string;
@@ -372,7 +372,7 @@ const marqueeItems: MarqueeItem[] = [
   { type: 'text', name: 'Innovate Botswana' },
 ];
 
-// ── Keyat Slideshow ────────────────────────────────────────────────────────
+// -- Keyat Slideshow --------------------------------------------------------
 
 const KEYAT_SHOTS = [
   { src: '/screenshots/keyat/keyat-m-1.png',  label: 'Hero' },
@@ -437,7 +437,7 @@ function KeyatSlideshow({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-// ── Paragon Slideshow ──────────────────────────────────────────────────────
+// -- Paragon Slideshow ------------------------------------------------------
 
 const PARAGON_SHOTS = [
   { src: '/screenshots/paragon/paragon-1.png',  label: 'Hero' },
@@ -508,7 +508,7 @@ function ParagonSlideshow({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-// ── Portfolio Slideshow ────────────────────────────────────────────────────
+// -- Portfolio Slideshow ----------------------------------------------------
 
 const SLIDESHOW_SHOTS = [
   { src: '/screenshots/shaun-chikerema/03-keyat-card.png',        label: 'Projects' },
@@ -581,7 +581,7 @@ function PortfolioSlideshow({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-// ── Page ───────────────────────────────────────────────────────────────────
+// -- Page -------------------------------------------------------------------
 
 export default function Home() {
   const [modal, setModal] = useState<{
@@ -597,7 +597,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
 
-      {/* ── Modals ──────────────────────────────────────────────── */}
+      {/* -- Modals ------------------------------------------------ */}
       {modal?.type === 'screenshots' && (
         <ScreenshotModal project={modal.project} onClose={() => setModal(null)} />
       )}
@@ -605,7 +605,7 @@ export default function Home() {
         <VideoModal project={modal.project} onClose={() => setModal(null)} />
       )}
 
-      {/* ── Hero ─────────────────────────────────────────────────── */}
+      {/* -- Hero --------------------------------------------------- */}
       <section className="relative pt-20 pb-16 bg-white overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
@@ -657,7 +657,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Trusted By Marquee ───────────────────────────────────── */}
+      {/* -- Trusted By Marquee ------------------------------------- */}
       {/*
         FIX NOTES:
         1. Outer wrapper uses overflow-hidden + flex via className (not inline style)
@@ -692,7 +692,7 @@ export default function Home() {
                 style={{ background: 'linear-gradient(to left, #ffffff 0%, transparent 100%)' }}
               />
 
-              {/* ── scrolling track ── */}
+              {/* -- scrolling track -- */}
               <div style={{ display: 'flex', width: 'max-content' }}>
                 {([0, 1] as const).map((trackIdx) => (
                   <div
@@ -749,7 +749,7 @@ export default function Home() {
         </div>
       </FadeIn>
 
-      {/* ── Services ────────────────────────────────────────────── */}
+      {/* -- Services ---------------------------------------------- */}
       <section id="services" className="py-24 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeIn>
@@ -809,7 +809,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Projects ────────────────────────────────────────────── */}
+      {/* -- Projects ---------------------------------------------- */}
       <section id="work" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
@@ -828,10 +828,10 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          {/* ── Project rows ── */}
+          {/* -- Project rows -- */}
           <div className="space-y-6">
 
-            {/* ── 01 · Keyat ── */}
+            {/* -- 01 · Keyat -- */}
             <FadeIn delay={60}>
               <div className="group relative grid lg:grid-cols-[1fr_420px] rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -890,7 +890,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 02 · PolicyBridge ── */}
+            {/* -- 02 · PolicyBridge -- */}
             <FadeIn delay={120}>
               <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-blue-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -962,7 +962,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 03 · Paragon — Client Work ── */}
+            {/* -- 03 · Paragon — Client Work -- */}
             <FadeIn delay={180}>
               <div className="group relative grid lg:grid-cols-[1fr_420px] rounded-2xl border border-slate-200 overflow-hidden hover:border-cyan-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -1015,7 +1015,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 04 · BlackDice ── */}
+            {/* -- 04 · BlackDice -- */}
             <FadeIn delay={240}>
               <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-red-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -1084,7 +1084,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 05 · Shaun Chikerema — Portfolio ── */}
+            {/* -- 05 · Shaun Chikerema — Portfolio -- */}
             <FadeIn delay={300}>
               <div className="group relative grid lg:grid-cols-[420px_1fr] rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -1146,7 +1146,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            {/* ── 06 · Yonder ── */}
+            {/* -- 06 · Yonder -- */}
             <FadeIn delay={360}>
               <div className="group relative grid lg:grid-cols-[1fr_420px] rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-200 hover:shadow-xl transition-all duration-500 bg-white">
 
@@ -1215,7 +1215,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Team ────────────────────────────────────────────────── */}
+      {/* -- Team -------------------------------------------------- */}
       <section id="team" className="py-24 bg-slate-50/60 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeIn>
@@ -1263,7 +1263,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ─────────────────────────────────────────────────── */}
+      {/* -- CTA --------------------------------------------------- */}
       <section className="bg-slate-900 text-white py-24">
         <div className="max-w-3xl mx-auto text-center px-6">
           <FadeIn>
@@ -1297,7 +1297,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Floating WhatsApp Button ─────────────────────────────── */}
+      {/* -- Floating WhatsApp Button ------------------------------- */}
       <a
         href="https://wa.me/26776051623"
         target="_blank"
