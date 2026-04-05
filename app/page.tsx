@@ -349,22 +349,21 @@ const marqueeItems: MarqueeItem[] = [
   },
   { type: 'text', name: 'Winning Pillar' },
   {
-    // Black bg PNG — invert flips bg to white, marks to light tones,
-    // then brightness re-darkens them to a visible medium grey
+    // Transparent PNG — greyscale + darken like Paragon
     type: 'img',
     src: '/clients/alfa-first-logo.png',
     alt: 'Alfa-First Projects',
     height: '58px',
-    filter: 'invert(1) grayscale(1) brightness(0.35)',
+    filter: 'grayscale(1) brightness(0.35)',
     opacity: 0.82,
   },
   {
-    // Black bg PNG — same invert trick; navy "KEYAT" text becomes legible grey
+    // Transparent PNG — greyscale + darken
     type: 'img',
     src: '/clients/keyat-logo.png',
     alt: 'Keyat Real Estate',
     height: '42px',
-    filter: 'invert(1) grayscale(1) brightness(0.45)',
+    filter: 'grayscale(1) brightness(0.35)',
     opacity: 0.8,
   },
   { type: 'text', name: 'Botswana Savings Bank' },
@@ -748,66 +747,6 @@ export default function Home() {
           </div>
         </div>
       </FadeIn>
-
-      {/* -- Services ---------------------------------------------- */}
-      <section id="services" className="py-24 bg-slate-50/60 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <FadeIn>
-            <div className="max-w-xl mb-14">
-              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-3">What we build</p>
-              <h2 className="text-4xl font-extrabold mb-4 text-slate-900 tracking-tight">End-to-end software development</h2>
-              <p className="text-slate-500 leading-relaxed">From concept to deployment — we own the full stack and deliver on time.</p>
-            </div>
-          </FadeIn>
-
-          <div className="grid md:grid-cols-3 gap-5">
-            <FadeIn delay={0} className="md:col-span-1">
-              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-emerald-200 hover:shadow-md transition-all group h-full flex flex-col">
-                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center mb-5 flex-shrink-0">
-                  <Code2 className="text-white" size={20} />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">Web Applications</h3>
-                <p className="text-slate-500 text-sm leading-relaxed flex-1">React, Next.js — responsive, performant, and accessible. From marketing sites to full SaaS platforms.</p>
-                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
-                  {['Next.js', 'React', 'TypeScript', 'Tailwind'].map(t => (
-                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={80}>
-              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
-                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
-                  <Smartphone className="text-slate-600" size={20} />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">Mobile Apps</h3>
-                <p className="text-slate-500 text-sm leading-relaxed flex-1">React Native, Flutter — cross-platform apps with native performance, built for low-bandwidth environments.</p>
-                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
-                  {['React Native', 'Flutter', 'Offline-first'].map(t => (
-                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={160}>
-              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
-                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
-                  <Database className="text-slate-600" size={20} />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">Backend & APIs</h3>
-                <p className="text-slate-500 text-sm leading-relaxed flex-1">Node.js, Python, PostgreSQL — scalable, secure, and cloud-native architectures with Row-Level Security.</p>
-                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
-                  {['Node.js', 'PostgreSQL', 'Supabase', 'AWS'].map(t => (
-                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
 
       {/* -- Projects ---------------------------------------------- */}
       <section id="work" className="py-24 bg-white">
@@ -1211,6 +1150,66 @@ export default function Home() {
             </FadeIn>
 
 
+          </div>
+        </div>
+      </section>
+
+      {/* -- Services ---------------------------------------------- */}
+      <section id="services" className="py-24 bg-slate-50/60 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <FadeIn>
+            <div className="max-w-xl mb-14">
+              <p className="text-emerald-700 font-semibold text-xs uppercase tracking-widest mb-3">What we build</p>
+              <h2 className="text-4xl font-extrabold mb-4 text-slate-900 tracking-tight">End-to-end software development</h2>
+              <p className="text-slate-500 leading-relaxed">From concept to deployment — we own the full stack and deliver on time.</p>
+            </div>
+          </FadeIn>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            <FadeIn delay={0} className="md:col-span-1">
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-emerald-200 hover:shadow-md transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center mb-5 flex-shrink-0">
+                  <Code2 className="text-white" size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Web Applications</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">React, Next.js — responsive, performant, and accessible. From marketing sites to full SaaS platforms.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['Next.js', 'React', 'TypeScript', 'Tailwind'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={80}>
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
+                  <Smartphone className="text-slate-600" size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Mobile Apps</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">React Native, Flutter — cross-platform apps with native performance, built for low-bandwidth environments.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['React Native', 'Flutter', 'Offline-first'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={160}>
+              <div className="bg-white border border-slate-200 rounded-xl p-7 hover:border-slate-300 hover:shadow-sm transition-all group h-full flex flex-col">
+                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 group-hover:bg-slate-200 transition-colors">
+                  <Database className="text-slate-600" size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-slate-900">Backend & APIs</h3>
+                <p className="text-slate-500 text-sm leading-relaxed flex-1">Node.js, Python, PostgreSQL — scalable, secure, and cloud-native architectures with Row-Level Security.</p>
+                <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {['Node.js', 'PostgreSQL', 'Supabase', 'AWS'].map(t => (
+                    <span key={t} className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded font-medium">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
